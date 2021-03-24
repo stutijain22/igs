@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'template' do
+target 'IGS' do
   config = use_native_modules!
 
   use_react_native!(
@@ -12,9 +12,7 @@ target 'template' do
     :hermes_enabled => false
   )
 
-  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-
-  target 'templateTests' do
+  target 'IGSTests' do
     inherit! :complete
     # Pods for testing
   end

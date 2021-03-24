@@ -1,35 +1,35 @@
 //const BASE_URL = "https://hair-there.herokuapp.com/";
 //const BASE_URL = "https://hair-there-dev.herokuapp.com/";
 
-const BASE_URL = "https://www.doctorhaina.com/";
+const BASE_URL = "https://www.AJENThaina.com/";
 const BASE_URL_AUTH = BASE_URL + "_auth/";
 const BASE_URL_API = "http://cdn.expertscube.com/api/";
 export default {
     // authentications
     IMAGE_URL:BASE_URL+"uploads/",
     AUTHENTICATE: BASE_URL_AUTH + "authenticate",
-    LOGING: BASE_URL + "app/doctor_web_api/email_login",
-    REGISTER: BASE_URL + "app/doctor_web_api/register",
-    REGISTER_WITH_OTP: BASE_URL + "app/doctor_web_api/register_with_otp",
-    RESEND_SIGNUP_OTP: BASE_URL + "app/doctor_web_api/resend_signup_otp",
-    LOGOUT: BASE_URL + "app/doctor_web_api/logout",
-    RESET_PASSWORD_OTP: BASE_URL + "app/doctor_web_api/reset_password_otp",
-    RESET_PASSWORD: BASE_URL + "app/doctor_web_api/reset_password",
-    DOCTOR_WORKING: BASE_URL + "app/doctor_web_api/doctor_address_info",
-    DOCTOR_SCHEDULE_DETAIL: BASE_URL + "app/doctor_web_api/get_doctor_schedule_detail",
-    MODIFY_USER: BASE_URL + "app/doctor_web_api/update_user_profile",
-    UPDATE_PROFILE_IMAGE: BASE_URL + "app/doctor_web_api/update_profile_image",
-    REMOVE_PROFILE_IMAGE: BASE_URL + "app/doctor_web_api/remove_profile_image",
-    REMOVE_DOCTOR_ADDRESS_INFO: BASE_URL + "app/doctor_web_api/remove_doctor_address_info",
-    CHECK_DOCTOR_AVAILABILITY: BASE_URL + "app/doctor_web_api/check_doctor_availability",
-    GET_ALL_DOCTORS_LIST: BASE_URL + "app/doctor_web_api/get_all_doctors_list",
-    GET_DOCTORS_SPECIALITY_LIST: BASE_URL + "app/doctor_web_api/get_doctor_speciality_list",
+    LOGING: BASE_URL + "app/AJENT_web_api/email_login",
+    REGISTER: BASE_URL + "app/AJENT_web_api/register",
+    REGISTER_WITH_OTP: BASE_URL + "app/AJENT_web_api/register_with_otp",
+    RESEND_SIGNUP_OTP: BASE_URL + "app/AJENT_web_api/resend_signup_otp",
+    LOGOUT: BASE_URL + "app/AJENT_web_api/logout",
+    RESET_PASSWORD_OTP: BASE_URL + "app/AJENT_web_api/reset_password_otp",
+    RESET_PASSWORD: BASE_URL + "app/AJENT_web_api/reset_password",
+    AJENT_WORKING: BASE_URL + "app/AJENT_web_api/AJENT_address_info",
+    AJENT_SCHEDULE_DETAIL: BASE_URL + "app/AJENT_web_api/get_AJENT_schedule_detail",
+    MODIFY_USER: BASE_URL + "app/AJENT_web_api/update_user_profile",
+    UPDATE_PROFILE_IMAGE: BASE_URL + "app/AJENT_web_api/update_profile_image",
+    REMOVE_PROFILE_IMAGE: BASE_URL + "app/AJENT_web_api/remove_profile_image",
+    REMOVE_AJENT_ADDRESS_INFO: BASE_URL + "app/AJENT_web_api/remove_AJENT_address_info",
+    CHECK_AJENT_AVAILABILITY: BASE_URL + "app/AJENT_web_api/check_AJENT_availability",
+    GET_ALL_AJENTS_LIST: BASE_URL + "app/AJENT_web_api/get_all_AJENTs_list",
+    GET_AJENTS_SPECIALITY_LIST: BASE_URL + "app/AJENT_web_api/get_AJENT_speciality_list",
     VERIFY_OTP: BASE_URL_AUTH + "verifyOTP",
     FORGOT_PASSWORD: BASE_URL_AUTH + "forgotPassword",
     SAVE_PASSWORD: BASE_URL_AUTH + "savePassword",    
     VERIFY_MOBILE_NUMBER: BASE_URL + "_users/verifyMobileNumber",
     SEND_MOBIL_OTP: BASE_URL + "_users/sendmobileOtp",
-    GET_USER: BASE_URL + "app/doctor_web_api/email_login",
+    GET_USER: BASE_URL + "app/AJENT_web_api/email_login",
     SAVE_LAT_LONG: BASE_URL + "_users/saveLatLong",
     CREATE_RATING: BASE_URL + "_ratings/createRating",
     EDIT_REVIEWS_AND_RATING: BASE_URL + "_ratings/editReviewsAndRating",

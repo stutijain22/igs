@@ -17,23 +17,25 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { showAlert } from '../../redux/action'
 
-class SignUp extends Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            first_name: "",
-            last_name: "",
-            verify_medium: '',
-            emailOrPhoneNumber: "",
+            emailOrPhone: "",
             location: "",
             password: "",
-            method: 'signup',
+            method: 'login',
             isCustomerSelected: true,
             isBarberSelected: false,
             isShowPassword: false,
-            userType: Globals.PATIENT,
+            isEmail: false,
+            facebook_id: '',
+            google_id: '',
+            first_name: '',
+            last_name: '',
+            userType: Globals.CUSTOMER,
             fcmToken: '',
             signInButtonText: Globals.CUSTOMER_SIGN_UP
         };
@@ -41,11 +43,62 @@ class SignUp extends Component {
     }
 
     componentDidMount() {
-     //   this.requestUserPermission();
+//        this.requestUserPermission();
     }
 
-   
 
+    clearStore = () => {
+        this.setState({
+            emailOrPhone: '',
+            facebook_id: '',
+            google_id: '',
+            first_name: '',
+            last_name: '',
+        });
+    }
+
+    customerClicked = async () => {
+        await this.setState({
+            signInButtonText: Globals.CUSTOMER_SIGN_UP,
+            isCustomerSelected: true,
+            isBarberSelected: false,
+            userType: Globals.CUSTOMER
+        })
+    };
+
+    _onFocus = () => {
+        const { navigation } = this.props;
+        const userType = navigation.getParam('userType');
+        if (userType === Globals.CUSTOMER) {
+            this.customerClicked();
+        }
+        if (userType === Globals.AJENT) {
+            this.barberClicked();
+        }
+    }
+
+    barberClicked = async () => {
+        await this.setState({
+            signInButtonText: Globals.AJENT_SIGN_UP,
+            isCustomerSelected: false,
+            isBarberSelected: true,
+            userType: Globals.AJENT
+        })
+    };
+
+      onPressSignUp = () => {
+        Keyboard.dismiss();
+        this.props.navigation.navigate('Login');
+    };
+
+    onPressSignIN = () => {
+       Keyboard.dismiss();
+       this.props.navigation.navigate('Login');
+    };
+
+
+
+   
     render() {
         return (
             <CustomBGParent loading={this.state.loading} backGroundColor={this.props.theme.BACKGROUND_COLOR}>
@@ -55,8 +108,8 @@ class SignUp extends Component {
                 <ScrollView style={[styles.container, { backgroundColor: this.props.theme.BACKGROUND_COLOR }]}
                     keyboardShouldPersistTaps='handled'>
                     <View style={styles.textViewHeader}>
-                        <CustomTextView textStyle={{ marginTop: scaleHeight * 20, marginLeft: scaleWidth * 20, fontWeight: 'bold' }}
-                            fontTextAlign={'left'} fontColor={this.props.theme.PRIMARY_TEXT_COLOR} fontSize={FONT_SIZE_25} value={"Sign Up"} />
+                        <CustomTextView textStyle={{ marginTop: scaleHeight * 50, marginLeft: scaleWidth * 20, fontWeight: 'bold' }}
+                            fontTextAlign={'left'} fontColor={this.props.theme.PRIMARY_TEXT_COLOR} fontSize={Typography.FONT_SIZE_25} value={"Sign Up"} />
                     </View>
 
                     <View style={styles.buttonSection}>
@@ -64,7 +117,7 @@ class SignUp extends Component {
                             isSelected={this.state.isCustomerSelected}
                             onPress={this.customerClicked}
                             textStyle={{ fontSize: FONT_SIZE_16, color: this.props.theme.BUTTON_TEXT_COLOR }}
-                            buttonText={capitalize(Globals.PATIENT)}
+                            buttonText={capitalize(Globals.CUSTOMER)}
                             cornerRadius={100}
                             buttonWidth={scaleWidth * 150}
                             buttonHeight={scaleHeight * 35}
@@ -74,7 +127,7 @@ class SignUp extends Component {
                             isSelected={this.state.isBarberSelected}
                             onPress={this.barberClicked}
                             textStyle={{ fontSize: FONT_SIZE_16, color: this.props.theme.BUTTON_TEXT_COLOR }}
-                            buttonText={capitalize(Globals.DOCTOR)}
+                            buttonText={capitalize(Globals.AJENT)}
                             cornerRadius={100}
                             buttonWidth={scaleWidth * 150}
                             buttonHeight={scaleHeight * 35}
@@ -129,34 +182,55 @@ class SignUp extends Component {
                         </CustomBGCard>
                     </View>
 
-                    <View style={{ marginHorizontal: scaleWidth * 20, marginTop: scaleHeight * 15 }}>
+                    <View
+                        style={{
+                            marginHorizontal: scaleWidth * 20,
+                            marginTop: scaleHeight * 30
+                        }}>
                         <CustomButton
-                            onPress={() => this.onPressSignup()}
-                            textStyle={{ fontSize: FONT_SIZE_20, color: this.props.theme.BUTTON_TEXT_COLOR }}
+                            onPress={() => this.onPressSignIN()}
+                            textStyle={{
+                                fontSize: FONT_SIZE_20,
+                                color: this.props.theme.BUTTON_TEXT_COLOR
+                            }}
                             buttonText={this.state.signInButtonText}
                             cornerRadius={100}
                             buttonHeight={scaleHeight * 50}
-                            buttonStyle={[styles.buttonsShadow, { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR }]}
-                            buttonWidth={'100%'} />
+                            buttonStyle={[styles.buttonsShadow,
+                            { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR }]}
+                            buttonWidth={Spacing.SCALE_320} />
                     </View>
 
-                    <TouchableOpacity
-                        onPress={this.goToLogin}
-                        activeOpacity={0.8}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'center', alignItems: 'center', marginTop: scaleHeight * 20
-                            }}>
-                            <CustomTextView value={"If you have an account?"}
-                                fontColor={this.props.theme.PRIMARY_TEXT_COLOR} textStyle={{ opacity: 0.5 }} fontSize={FONT_SIZE_16} />
+                    <View style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        marginTop: scaleHeight * 15,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                      
+                    </View>
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: scaleHeight * 40
+                        }}>
+                        <CustomTextView
+                            value={"Don't have an account?"}
+                            fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
+                            textStyle={{ opacity: 0.5 }}
+                            fontSize={FONT_SIZE_16} />
+                        <TouchableOpacity onPress={()=>this.onPressSignUp()} >
                             <CustomTextView
-                                value={" Sign In"}
+                                value={" Sign Up"}
                                 fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
                                 textStyle={{ fontWeight: 'bold' }}
                                 fontSize={FONT_SIZE_16} />
-                        </View>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
             </CustomBGParent>
         )
@@ -173,4 +247,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SignUp)
+)(Login)

@@ -1,6 +1,6 @@
 export const COUNTRY_CODE = '+91';
-export const DOCTOR = 'doctor';
-export const PATIENT = 'patient';
+export const AJENT = 'Agent';
+export const CUSTOMER = 'Customer';
 
 export const HOURS_PICKER_VALUE = [{
     value: '0',
@@ -30,14 +30,14 @@ export default {
     _KEYS: {
         USER_DATA: 'user',
         CUSTOMER_SELECTED_SERVICES: 'customerSelectedServices',
-        BARBER_SELECTED_SERVICES: 'DoctorSelectedServices',
+        BARBER_SELECTED_SERVICES: 'AJENTSelectedServices',
         APPOINTMENT_DATE: 'appointmentDate',
         APPOINTMENT_TIME: 'appointmentTime',
-        SELECTED_BARBER: 'selectedDoctor',
-        DOCTOR_LAT: 'doctorLat',
-        DOCTOR_LONG: 'doctorLong',
-        DOCTOR_ADDRESS: 'doctorAddress',
-        DOCTOR_MANUAL_ADDRESS: 'doctorManualAddress',
+        SELECTED_BARBER: 'selectedAJENT',
+        AJENT_LAT: 'AJENTLat',
+        AJENT_LONG: 'AJENTLong',
+        AJENT_ADDRESS: 'AJENTAddress',
+        AJENT_MANUAL_ADDRESS: 'AJENTManualAddress',
         APPOINTMENT_ID_PRIFIX: 'CAPM',
         JWT_TOKEN: 'token',
         USER_ID: 'id',
@@ -69,7 +69,7 @@ export default {
         EMPTY_SERVICES: 'Service Not Available',
         EMPTY_CATEGORY: 'Category Not Available',
         EMPTY_REVIEW: 'Review Not Available',
-        EMPTY_BARBER: 'Doctor Not Available',
+        EMPTY_BARBER: 'AJENT Not Available',
     },
 
     ErrorKey: {
@@ -79,15 +79,15 @@ export default {
         WARNING: 'Warning',
     },
 
-    DOCTOR: 'Doctor',
+    AJENT: 'Agent',
     AUTH_LOGIN:'AuthLogin',
-    PATIENT: 'Patient',
-    DOCTOR_SIGN_IN: 'Doctor Sign In',
-    PATIENT_SIGN_IN: 'Patient Sign In',
-    BARBER_SIGN_UP: 'Doctor Sign Up',
-    CUSTOMER_SIGN_UP: 'Patient Sign Up',
-    PATIENT_ROLE_ID: '2',
-    DOCTOR_ROLE_ID: '1',
+    CUSTOMER: 'Customer',
+    AJENT_SIGN_IN: 'Agent Sign In',
+    CUSTOMER_SIGN_IN: 'Customer Sign In',
+    AJENT_SIGN_UP: 'Agent Sign Up',
+    CUSTOMER_SIGN_UP: 'Customer Sign Up',
+    CUSTOMER_ROLE_ID: '2',
+    AJENT_ROLE_ID: '1',
     GALLERY: 'Gallery',
     CAMERA: 'Camera',
     REMOVE: 'Remove',

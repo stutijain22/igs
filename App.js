@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, LogBox } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import Navigator from './src/navigations/Navigation'
 import NavigationService from './src/navigations/NavigationService'
 import { connect } from 'react-redux';
@@ -9,19 +8,13 @@ class App extends Component {
   constructor() {
     super();
     LogBox.ignoreLogs(['Class RCTCxxModule']);
+
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 3000);
-    
   }
 
   componentWillUnmount() {
-    //this.setBackground;
-    //this.setNotificationOpen;
-    //this.unsubscribe;
   }
 
   render() {

@@ -35,9 +35,9 @@ class Login extends Component {
             google_id: '',
             first_name: '',
             last_name: '',
-            userType: Globals.PATIENT,
+            userType: Globals.CUSTOMER,
             fcmToken: '',
-            signInButtonText: Globals.PATIENT_SIGN_IN
+            signInButtonText: Globals.CUSTOMER_SIGN_IN
         };
 
     }
@@ -57,10 +57,45 @@ class Login extends Component {
         });
     }
 
+    customerClicked = async () => {
+        await this.setState({
+            signInButtonText: Globals.CUSTOMER_SIGN_IN,
+            isCustomerSelected: true,
+            isBarberSelected: false,
+            userType: Globals.CUSTOMER
+        })
+    };
+
+    _onFocus = () => {
+        const { navigation } = this.props;
+        const userType = navigation.getParam('userType');
+        if (userType === Globals.CUSTOMER) {
+            this.customerClicked();
+        }
+        if (userType === Globals.AJENT) {
+            this.barberClicked();
+        }
+    }
+
+    barberClicked = async () => {
+        await this.setState({
+            signInButtonText: Globals.AJENT_SIGN_IN,
+            isCustomerSelected: false,
+            isBarberSelected: true,
+            userType: Globals.AJENT
+        })
+    };
+
       onPressSignUp = () => {
         Keyboard.dismiss();
         this.props.navigation.navigate('SignUp');
     };
+
+    onPressSignIN = () => {
+       Keyboard.dismiss();
+       this.props.navigation.navigate('SignUp');
+    };
+
 
 
    
@@ -82,7 +117,7 @@ class Login extends Component {
                             isSelected={this.state.isCustomerSelected}
                             onPress={this.customerClicked}
                             textStyle={{ fontSize: FONT_SIZE_16, color: this.props.theme.BUTTON_TEXT_COLOR }}
-                            buttonText={capitalize(Globals.PATIENT)}
+                            buttonText={capitalize(Globals.CUSTOMER)}
                             cornerRadius={100}
                             buttonWidth={scaleWidth * 150}
                             buttonHeight={scaleHeight * 35}
@@ -92,7 +127,7 @@ class Login extends Component {
                             isSelected={this.state.isBarberSelected}
                             onPress={this.barberClicked}
                             textStyle={{ fontSize: FONT_SIZE_16, color: this.props.theme.BUTTON_TEXT_COLOR }}
-                            buttonText={capitalize(Globals.DOCTOR)}
+                            buttonText={capitalize(Globals.AJENT)}
                             cornerRadius={100}
                             buttonWidth={scaleWidth * 150}
                             buttonHeight={scaleHeight * 35}
@@ -120,7 +155,7 @@ class Login extends Component {
                                     }}
                                     onChangeText={text => this.setState({ emailOrPhone: text })}
                                     value={this.state.emailOrPhone}
-                                    placeholder={"Your Email or Phone"} />
+                                    placeholder={"Enter Your Phone"} />
 
                                 <View
                                     style={{
@@ -219,7 +254,7 @@ class Login extends Component {
                             fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
                             textStyle={{ opacity: 0.5 }}
                             fontSize={FONT_SIZE_16} />
-                        <TouchableOpacity onPress={this.onPressSignUp} >
+                        <TouchableOpacity onPress={()=>this.onPressSignUp()} >
                             <CustomTextView
                                 value={" Sign Up"}
                                 fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
