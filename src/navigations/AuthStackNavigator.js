@@ -1,11 +1,12 @@
 import { createStackNavigator } from "react-navigation-stack";
 import Login from "../screens/Login";
+import SignUp from "../screens/SignUp";
 
 
 export default createStackNavigator({
    // Welcome,
     Login,
-   // SignUp,
+    SignUp,
    // OtpVerification,
    // ForgotPassword,
    // ResetPassword

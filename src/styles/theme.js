@@ -7,7 +7,7 @@ export const darkTheme = {
     BACKGROUND_COLOR: '#000000',
     PRIMARY_TEXT_COLOR: '#FFFFFF',
     SECONDARY_TEXT_COLOR: '#50FFFFFF',
-    BUTTON_BACKGROUND_COLOR: '#B38A53',
+    BUTTON_BACKGROUND_COLOR: '#0000FF',
     IMAGE_TINT_COLOR: '#B38A53',
     BUTTON_TEXT_COLOR: '#FFFFFF',
     SELECTED_IMAGE_COLOR_BOTTOM_BAR: '#FFFFFF',
@@ -31,7 +31,6 @@ export const darkTheme = {
     RED:'#FF0000',
     YELLOW:'#FFFF00',
     GREEN:'#008000',
-    BLUE:'#0000FF'
   }
   export const lightTheme = {
     mode: 'light',
@@ -42,7 +41,7 @@ export const darkTheme = {
     BACKGROUND_COLOR: '#FFFFFF',
     PRIMARY_TEXT_COLOR: '#000000',
     SECONDARY_TEXT_COLOR: '#888888',
-    BUTTON_BACKGROUND_COLOR: '#43D1D0',
+    BUTTON_BACKGROUND_COLOR: '#0000FF',
     IMAGE_TINT_COLOR: '#43D1D0',
     DARK_IMAGE_TINT_COLOR: '#43D1D0',
     BUTTON_TEXT_COLOR: '#FFFFFF',
@@ -67,5 +66,4 @@ export const darkTheme = {
     RED:'#FF0000',
     YELLOW:'#FFFF00',
     GREEN:'#008000',
-    BLUE:'#0000FF'
   }

@@ -57,6 +57,11 @@ class Login extends Component {
         });
     }
 
+      onPressSignUp = () => {
+        Keyboard.dismiss();
+        this.props.navigation.navigate('SignUp');
+    };
+
 
    
     render() {
@@ -188,7 +193,7 @@ class Login extends Component {
                             cornerRadius={100}
                             buttonHeight={scaleHeight * 50}
                             buttonStyle={[styles.buttonsShadow,
-                            { backgroundColor: this.props.theme.BLUE }]}
+                            { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR }]}
                             buttonWidth={Spacing.SCALE_320} />
                     </View>
 
