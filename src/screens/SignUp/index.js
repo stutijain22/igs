@@ -219,13 +219,13 @@ class Login extends Component {
                             marginTop: scaleHeight * 40
                         }}>
                         <CustomTextView
-                            value={"Don't have an account?"}
+                            value={"You have an account?"}
                             fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
                             textStyle={{ opacity: 0.5 }}
                             fontSize={FONT_SIZE_16} />
                         <TouchableOpacity onPress={()=>this.onPressSignUp()} >
                             <CustomTextView
-                                value={" Sign Up"}
+                                value={" Sign In"}
                                 fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
                                 textStyle={{ fontWeight: 'bold' }}
                                 fontSize={FONT_SIZE_16} />
