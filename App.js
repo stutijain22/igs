@@ -3,6 +3,7 @@ import { View, StyleSheet, LogBox } from 'react-native';
 import Navigator from './src/navigations/Navigation'
 import NavigationService from './src/navigations/NavigationService'
 import { connect } from 'react-redux';
+import AlertPopUp from './src/components/AlertPopUp'
 
 class App extends Component {
   constructor() {
@@ -22,11 +23,14 @@ class App extends Component {
       <View style={[styles.container, { backgroundColor: this.props.theme.BACKGROUND_COLOR }]}>
         <View style={styles.navigatorView}>
           <Navigator
+          
             ref={navigatorRef => {
               NavigationService.init(navigatorRef);
             }}
           />
-          
+         {this.props.alertVisibility && (
+            <AlertPopUp/>
+          )} 
         </View>
       </View>
     )
