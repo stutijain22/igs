@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   ScrollView,
-  TextInput,
   View,
   Image,
   TouchableOpacity,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
+import TextInput from 'react-native-material-textinput'
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
 import styles from './styles';
 import CustomButton from '../../components/CustomButton';
@@ -37,8 +37,8 @@ import {bindActionCreators} from 'redux';
 import {showAlert} from '../../redux/action';
 
 var radio_props = [
-  {label: Globals.HOME, value: 0, valueIndex: 0},
-  {label: Globals.AJENT, value: 1, valueIndex: 0},
+  {label: Globals.HOME, value: 0},
+  {label: Globals.AJENT, value: 1},
 ];
 
 class Login extends Component {
@@ -48,18 +48,15 @@ class Login extends Component {
       loading: false,
       emailOrPhone: '',
       location: '',
-      password: '',
       method: 'login',
       isCustomerSelected: true,
       isSelected: false,
       isBarberSelected: false,
       isShowPassword: false,
       isEmail: false,
-      facebook_id: '',
-      google_id: '',
-      first_name: '',
-      last_name: '',
-      agent_id:'',
+      phone_number: '',
+      from_screen: '',
+      agent_id: '',
       userType: Globals.CUSTOMER,
       fcmToken: '',
       signInButtonText: Globals.CUSTOMER_SIGN_IN,
@@ -115,9 +112,30 @@ class Login extends Component {
     this.props.navigation.navigate('SignUp');
   };
 
-  onPressSignIN = () => {
+  onPressSignIN = async item => {
     Keyboard.dismiss();
-    this.props.navigation.navigate('SignUp');
+    await this.signUpCheckValidity();
+  };
+
+  signUpCheckValidity = () => {
+    if (this.state.emailOrPhone.toString().trim().length == 0) {
+      this.props.showAlert(
+        true,
+        Globals.ErrorKey.WARNING,
+        'Please enter phone number',
+      );
+    } else {
+      this.props.navigation.navigate('OtpVerification', {
+        phone_number: this.state.emailOrPhone,
+        from_screen: this.state.from_screen,
+      });
+      //this.uploadDocuments();
+    }
+  };
+
+  onPressText = async text => {
+    await this.setState({emailOrPhone: text});
+    // this.VerifyNumber();
   };
 
   render() {
@@ -148,12 +166,14 @@ class Login extends Component {
 
           <View style={styles.buttonSection}>
             <RadioForm
-              isSelected={this.state.isSelected}
+              //isSelected={this.state.isSelected}
               radio_props={radio_props}
               initial={0}
               labelStyle={{marginRight: 10}}
               formHorizontal={true}
               animation={true}
+              buttonSize={15}
+              buttonOuterSize={25}
               // labelHorizontal={false}
               onPress={value => {
                 this.setState({value: value});
@@ -172,8 +192,6 @@ class Login extends Component {
                   marginBottom: scaleHeight * 60,
                   marginTop: scaleHeight * 20,
                 }}>
-               
-
                 <TextInput
                   style={{
                     fontSize: FONT_SIZE_16,
@@ -182,48 +200,16 @@ class Login extends Component {
                     borderBottomWidth: 1,
                     marginTop: scaleHeight * 20,
                   }}
-                  onChangeText={text => this.setState({emailOrPhone: text})}
+                  label="Enter Your Phone"
+                  keyboardType={'phone-pad'}
+                  onChangeText={text =>
+                    text.length >= 10
+                      ? this.onPressText(text)
+                      : this.setState({emailOrPhone: text})
+                  }
                   value={this.state.emailOrPhone}
-                  placeholder={'Enter Your Phone'}
+                 // placeholder={'Enter Your Phone'}
                 />
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginTop: scaleHeight * 20,
-                    borderBottomWidth: 1,
-                    borderColor: GRAY_DARK,
-                  }}>
-                  <TextInput
-                    style={{
-                      fontSize: FONT_SIZE_16,
-                      height: scaleHeight * 50,
-                      width: '85%',
-                    }}
-                    onChangeText={text => this.setState({password: text})}
-                    value={this.state.password}
-                    placeholder={'Password'}
-                    secureTextEntry={!this.state.isShowPassword}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: scaleHeight * 35,
-                      width: scaleWidth * 35,
-                    }}
-                    onPress={this.showPassword}>
-                    <Image
-                      style={{
-                        height: scaleHeight * 15,
-                        width: scaleWidth * 15,
-                      }}
-                      //   source={this.state.isShowPassword ? EYE_ON : EYE_OFF}
-                    />
-                  </TouchableOpacity>
-                </View>
               </View>
             </CustomBGCard>
           </View>
@@ -256,7 +242,7 @@ class Login extends Component {
                 fontSize: FONT_SIZE_20,
                 color: this.props.theme.BUTTON_TEXT_COLOR,
               }}
-              buttonText={this.state.value ==0 ? Globals.HOME_SIGN_IN : Globals.AJENT_SIGN_IN }
+              buttonText={'Send OTP'}
               cornerRadius={100}
               buttonHeight={scaleHeight * 50}
               buttonStyle={[

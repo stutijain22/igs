@@ -152,23 +152,7 @@ class Login extends Component {
         Globals.ErrorKey.WARNING,
         "Please enter phone number"
       );
-    }  else if (
-        this.state.password.toString().trim().length == 0
-      ) {
-        this.props.showAlert(
-          true,
-          Globals.ErrorKey.WARNING,
-          "Please enter password"
-        );
-      }  else if (
-        this.state.confirm_password.toString().trim().length == 0
-      ) {
-        this.props.showAlert(
-          true,
-          Globals.ErrorKey.WARNING,
-          "Please enter confirm password"
-        );
-      } else {
+    }  else {
       
       this.props.navigation.navigate('OtpVerification');
       //this.uploadDocuments();
@@ -260,7 +244,7 @@ class Login extends Component {
                     this.setState({phone_number: text})
                   }
                   value={this.state.phone_number}
-                  placeholder={'Phone NUmber'}
+                  placeholder={'Phone Number'}
                 />
 
                 <TextInput
@@ -272,52 +256,6 @@ class Login extends Component {
                   placeholder={'Email(optional)'}
                 />
 
-                <View style={styles.textInputPassword}>
-                  <TextInput
-                    style={{height: scaleHeight * 50, width: '85%'}}
-                    onChangeText={text => this.setState({password: text})}
-                    value={this.state.password}
-                    placeholder={'Password'}
-                    secureTextEntry={!this.state.isShowPassword}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: scaleHeight * 35,
-                      width: scaleWidth * 35,
-                    }}>
-                    <Image
-                      style={{
-                        height: scaleHeight * 15,
-                        width: scaleWidth * 15,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.textInputPassword}>
-                  <TextInput
-                    style={{height: scaleHeight * 50, width: '85%'}}
-                    onChangeText={text => this.setState({confirm_password: text})}
-                    value={this.state.confirm_password}
-                    placeholder={'Confirm Password'}
-                    secureTextEntry={!this.state.isShowPassword}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: scaleHeight * 35,
-                      width: scaleWidth * 35,
-                    }}>
-                    <Image
-                      style={{
-                        height: scaleHeight * 15,
-                        width: scaleWidth * 15,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
               </View>
             </CustomBGCard>
           </View>
@@ -333,11 +271,7 @@ class Login extends Component {
                 fontSize: FONT_SIZE_20,
                 color: this.props.theme.BUTTON_TEXT_COLOR,
               }}
-              buttonText={
-                this.state.value == 0
-                  ? Globals.HOME_SIGN_IN
-                  : Globals.AJENT_SIGN_IN
-              }
+              buttonText={'Send OTP'}
               cornerRadius={100}
               buttonHeight={scaleHeight * 50}
               buttonStyle={[
