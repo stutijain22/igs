@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {
   ScrollView,
-  TextInput,
   View,
   Image,
   TouchableOpacity,
   Keyboard,
   Platform,
 } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
@@ -114,7 +114,7 @@ class Login extends Component {
   };
 
   onPressSignUp = () => {
-      console.log('hhhhhhhhhhhhhhh');
+     // console.log('hhhhhhhhhhhhhhh');
     Keyboard.dismiss();
     this.signUpCheckValidity();
    
@@ -126,7 +126,7 @@ class Login extends Component {
   };
 
   signUpCheckValidity = () => {
-    console.log('hhhhhhhhhhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjj');
+  //  console.log('hhhhhhhhhhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjj');
    // console.log('hhhhhhhhhhhhhhh',this.state.selectedItems.length == 0)
     if (
       this.state.name.toString().trim().length == 0 
@@ -161,6 +161,8 @@ class Login extends Component {
 
   render() {
     return (
+
+      
       <CustomBGParent
         loading={this.state.loading}
         backGroundColor={this.props.theme.BACKGROUND_COLOR}>
@@ -193,6 +195,8 @@ class Login extends Component {
               labelStyle={{marginRight: 10}}
               formHorizontal={true}
               animation={true}
+              buttonSize={15}
+              buttonOuterSize={25}
               // labelHorizontal={false}
               onPress={value => {
                 this.setState({value: value});
@@ -202,6 +206,7 @@ class Login extends Component {
           </View>
 
           <View style={[styles.cardShadow, styles.margins]}>
+            
             <CustomBGCard
               topMargin={scaleHeight * 15}
               cornerRadius={scaleWidth * 15}
@@ -212,48 +217,72 @@ class Login extends Component {
                     style={{
                       fontSize: FONT_SIZE_16,
                       height: scaleHeight * 50,
-                      borderColor: GRAY_DARK,
-                      borderBottomWidth: 1,
                       marginTop: scaleHeight * 20,
                     }}
+                    mode={'outlined'}
+                    label="Agent id"
                     onChangeText={text => this.setState({agent_id: text})}
                     value={this.state.agent_id}
-                    placeholder={'Agent id'}
                   />
                 )}
                 <TextInput
-                  style={styles.textInputStyle}
+                style={{
+                  fontSize: FONT_SIZE_16,
+                  height: scaleHeight * 50,
+                  marginTop: scaleHeight * 20,
+                }}
+                 mode={'outlined'}
+                 // style={styles.textInputStyle}
                   onChangeText={text => this.setState({name: text})}
                   value={this.state.name}
-                  placeholder={'Name'}
+                  label="Name"
                 />
 
                 <TextInput
-                  style={styles.textInputStyle}
+                style={{
+                  fontSize: FONT_SIZE_16,
+                  height: scaleHeight * 50,
+                  marginTop: scaleHeight * 20,
+                }}
+                //  style={styles.textInputStyle}
                   onChangeText={text =>
                     this.setState({dob: text})
                   }
+                  mode={'outlined'}
                   value={this.state.dob}
-                  placeholder={'Date Of Birth'}
+                  label="Date Of Birth"
                 />
 
                 <TextInput
-                  style={styles.textInputStyle}
+                style={{
+                  fontSize: FONT_SIZE_16,
+                  height: scaleHeight * 50,
+                  marginTop: scaleHeight * 20,
+                }}
+                //  style={styles.textInputStyle}
                   keyboardType={'numeric'}
                   onChangeText={text =>
                     this.setState({phone_number: text})
                   }
+                  label="Phone Number"  
+                  mode={'outlined'}
                   value={this.state.phone_number}
-                  placeholder={'Phone Number'}
                 />
 
+
                 <TextInput
-                  style={styles.textInputStyle}
+                style={{
+                  fontSize: FONT_SIZE_16,
+                  height: scaleHeight * 50,
+                  marginTop: scaleHeight * 20,
+                }}
+                 // style={styles.textInputStyle}
                   onChangeText={text =>
                     this.setState({email: text})
                   }
+                  label="Email(optional)"
+                  mode={'outlined'}
                   value={this.state.email}
-                  placeholder={'Email(optional)'}
                 />
 
               </View>

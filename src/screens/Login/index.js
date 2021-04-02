@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { useRef, useState , Component } from 'react';
 import {
   ScrollView,
   View,
@@ -7,9 +7,9 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
-import TextInput from 'react-native-material-textinput'
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
 import styles from './styles';
 import CustomButton from '../../components/CustomButton';
@@ -62,6 +62,7 @@ class Login extends Component {
       signInButtonText: Globals.CUSTOMER_SIGN_IN,
       value: 0,
     };
+  
   }
 
   componentDidMount() {
@@ -97,6 +98,7 @@ class Login extends Component {
       this.barberClicked();
     }
   };
+
 
   barberClicked = async () => {
     await this.setState({
@@ -192,14 +194,15 @@ class Login extends Component {
                   marginBottom: scaleHeight * 60,
                   marginTop: scaleHeight * 20,
                 }}>
+
                 <TextInput
                   style={{
                     fontSize: FONT_SIZE_16,
                     height: scaleHeight * 50,
-                    borderColor: GRAY_DARK,
-                    borderBottomWidth: 1,
                     marginTop: scaleHeight * 20,
                   }}
+                  mode={'outlined'}
+                  //inputText={'outline'}
                   label="Enter Your Phone"
                   keyboardType={'phone-pad'}
                   onChangeText={text =>
@@ -208,7 +211,7 @@ class Login extends Component {
                       : this.setState({emailOrPhone: text})
                   }
                   value={this.state.emailOrPhone}
-                 // placeholder={'Enter Your Phone'}
+                  // placeholder={'Enter Your Phone'}
                 />
               </View>
             </CustomBGCard>
