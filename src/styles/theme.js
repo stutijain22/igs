@@ -31,6 +31,7 @@ export const darkTheme = {
   RED:'#FF0000',
   YELLOW:'#FFFF00',
   GREEN:'#008000',
+  GRAY:'#808080'
 }
 export const lightTheme = {
   mode: 'light',
@@ -66,4 +67,5 @@ export const lightTheme = {
   RED:'#FF0000',
   YELLOW:'#FFFF00',
   GREEN:'#008000',
+  GRAY:'#808080'
 }

@@ -7,9 +7,9 @@ import CustomButton from '../../components/CustomButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {storeData, storeJSONData} from '../../utils/AsyncStorage';
 import Globals from '../../constants/Globals';
+import { showAlert } from '../../redux/action'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {showAlert} from '../../redux/action';
 import {
   FONT_SIZE_14,
   FONT_SIZE_16,
@@ -109,6 +109,11 @@ class OtpVerification extends Component {
       code: '',
     });
   };
+
+  onClick = () => {
+    this.props.navigation.navigate('Dashboard');
+  };
+
 
   VerifyOtp = code => {
     this.setState({loading: true});
@@ -232,6 +237,7 @@ class OtpVerification extends Component {
     return (
       <CustomBGParent loading={this.state.loading}>
         <View style={styles.textViewHeader}>
+          <TouchableOpacity onPress={() => this.onClick()}>
           <CustomTextView
             textStyle={{
               marginTop: SCALE_50,
@@ -243,7 +249,7 @@ class OtpVerification extends Component {
             fontSize={FONT_SIZE_25}
             value={this.state.headerText}
           />
-
+</TouchableOpacity>
           <CustomTextView
             textStyle={{
               marginTop: SCALE_15,
@@ -273,7 +279,7 @@ class OtpVerification extends Component {
               },
             ]}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
-            onCodeFilled={this.VerifyOtp}
+           // onCodeFilled={this.VerifyOtp}
             placeholderCharacter={'*'}
             placeholderTextColor={this.props.theme.BUTTON_TEXT_COLOR}
           />
@@ -281,15 +287,16 @@ class OtpVerification extends Component {
 
         <View style={{marginHorizontal: SCALE_40}}>
           <CustomButton
-            onPress={() =>
-              `${this.state.code}`.length < 6
+          onPress={() => this.onClick()}
+          /*  onPress={() =>
+              `${this.state.code}`.length < 4
                 ? this.props.showAlert(
                     true,
                     Globals.ErrorKey.ERROR,
                     'Please enter the OTP',
                   )
-                : this.VerifyOtp.bind(this, this.state.code)
-            }
+                : this.onClick()
+            }*/
             textStyle={{
               fontSize: FONT_SIZE_20,
               color: this.props.theme.BUTTON_TEXT_COLOR,
@@ -339,7 +346,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // showAlert: bindActionCreators(showAlert, dispatch),
+   showAlert: bindActionCreators(showAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtpVerification);

@@ -59,6 +59,7 @@ class Login extends Component {
       google_id: '',
       name: '',
       dob: '',
+      focus : false,
       phone_number: '',
       email_id: '',
       confirm_password: '',
@@ -160,9 +161,9 @@ class Login extends Component {
   };
 
   render() {
+    const { focus } = this.state;
+   console.log('hhhhhhhhhhhh',JSON.stringify(focus));
     return (
-
-      
       <CustomBGParent
         loading={this.state.loading}
         backGroundColor={this.props.theme.BACKGROUND_COLOR}>
@@ -219,6 +220,9 @@ class Login extends Component {
                       height: scaleHeight * 50,
                       marginTop: scaleHeight * 20,
                     }}
+                    autoFocus={true}
+                   // onFocus={()=>{this.setState({focus:true})}}
+                  // onBlur={()=>{this.setState({focus:true})}}
                     mode={'outlined'}
                     label="Agent id"
                     onChangeText={text => this.setState({agent_id: text})}
@@ -232,6 +236,7 @@ class Login extends Component {
                   marginTop: scaleHeight * 20,
                 }}
                  mode={'outlined'}
+                 autoFocus={true}
                  // style={styles.textInputStyle}
                   onChangeText={text => this.setState({name: text})}
                   value={this.state.name}
@@ -245,6 +250,7 @@ class Login extends Component {
                   marginTop: scaleHeight * 20,
                 }}
                 //  style={styles.textInputStyle}
+                autoFocus={true}
                   onChangeText={text =>
                     this.setState({dob: text})
                   }
@@ -259,6 +265,7 @@ class Login extends Component {
                   height: scaleHeight * 50,
                   marginTop: scaleHeight * 20,
                 }}
+                autoFocus={true}
                 //  style={styles.textInputStyle}
                   keyboardType={'numeric'}
                   onChangeText={text =>
@@ -276,6 +283,7 @@ class Login extends Component {
                   height: scaleHeight * 50,
                   marginTop: scaleHeight * 20,
                 }}
+                autoFocus={true}
                  // style={styles.textInputStyle}
                   onChangeText={text =>
                     this.setState({email: text})

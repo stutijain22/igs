@@ -174,8 +174,8 @@ class Login extends Component {
               labelStyle={{marginRight: 10}}
               formHorizontal={true}
               animation={true}
-              buttonSize={15}
-              buttonOuterSize={25}
+              buttonSize={12}
+              buttonOuterSize={22}
               // labelHorizontal={false}
               onPress={value => {
                 this.setState({value: value});
