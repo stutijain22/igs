@@ -73,7 +73,7 @@ class CreateService extends Component {
       date: new Date(),
       // userType: Globals.PATIENT,
       inputtext: '',
-      selectedItems: [],
+      //selectedItems: [],
     };
   }
 
@@ -204,7 +204,9 @@ class CreateService extends Component {
     });
   };*/
 
-  goBack = async () => {};
+  goBack = async () => {
+    this.props.navigation.navigate('Dashboard');
+  };
 
   onChange = (event, selectedDate) => {
     if (!isEmpty(true, selectedDate)) {
@@ -215,13 +217,13 @@ class CreateService extends Component {
   };
 
   onSelectedItemsChange = async (selectedItems) => {
-    console.log("selectedItems" + JSON.stringify(selectedItems));
-    this.setState({ selectedItems });
+    //console.log("selectedItems" + JSON.stringify(selectedItems));
+    //this.setState({ selectedItems });
     await this.getBarberCurrentLocation();
   };
 
   onSubmitClick = () => {
-    console.log("onSubmitClick" + JSON.stringify(this.state.selectedItems));
+    //console.log("onSubmitClick" + JSON.stringify(this.state.selectedItems));
   };
 
   render() {
@@ -240,40 +242,44 @@ class CreateService extends Component {
           }}>
           <TouchableOpacity
             style={{
-              position: 'absolute',
+              position: "absolute",
               width: scaleWidth * 60,
               height: scaleHeight * 25,
-              justifyContent: Platform.OS === 'android' ? 'flex-end' : 'center',
-              alignItems: 'center',
+              justifyContent: Platform.OS === "android" ? "flex-end" : "center",
+              alignItems: "center",
             }}
-            onPress={() => this.goBack()}>
+            onPress={() => this.goBack()}
+          >
             <Image
               style={{
                 width: scaleWidth * 10,
                 height: scaleHeight * 20,
-                tintColor: this.props.theme.IMAGE_TINT_COLOR,
+                tintColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
               }}
               source={BACK}
             />
           </TouchableOpacity>
           <View
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: 50,
               height: scaleHeight * 25,
-              justifyContent: Platform.OS === 'android' ? 'flex-end' : 'center',
-              alignItems: 'center',
-            }}>
+              justifyContent: Platform.OS === "android" ? "flex-end" : "center",
+              alignItems: "center",
+            }}
+          >
             <Text
               style={{
                 fontSize: Typography.FONT_SIZE_16,
                 color: this.props.theme.PRIMARY_TEXT_COLOR,
-                fontWeight: 'bold',
-              }}>
-              CreateService
+                fontWeight: "bold",
+              }}
+            >
+              Create request
             </Text>
           </View>
-        </View>
+       </View>
+      
         <ScrollView>
           {/*<Text style={{ marginLeft: scaleWidth * 22, fontSize: Typography.FONT_SIZE_30, color: this.props.theme.PRIMARY_TEXT_COLOR }}>Edit Profile</Text>*/}
 
@@ -289,62 +295,6 @@ class CreateService extends Component {
                     marginHorizontal: 10,
                     backgroundColor: this.props.theme.WHITE,
                   }}>
-                  <MultiSelect
-                    hideTags
-                    items={items}
-                    uniqueKey="id"
-                    ref={component => {
-                      this.multiSelect = component;
-                    }}
-                    onSubmitClick={() => this.onSubmitClick()}
-                    onSelectedItemsChange={this.onSelectedItemsChange}
-                    selectedItems={selectedItems}
-                    selectText="Pick Service"
-                    searchInputPlaceholderText="Search Service..."
-                    onChangeInput={text => console.log(text)}
-                    //altFontFamily="ProximaNova-Light"
-                    tagRemoveIconColor={
-                      this.props.theme.BUTTON_BACKGROUND_COLOR
-                    }
-                    tagBorderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                    tagTextColor="#CCC"
-                    selectedItemTextColor={
-                      this.props.theme.SECONDARY_TEXT_COLOR
-                    }
-                    selectedItemIconColor={
-                      this.props.theme.BUTTON_BACKGROUND_COLOR
-                    }
-                    itemTextColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    displayKey="speciality_title"
-                    searchInputStyle={{color: '#CCC'}}
-                    submitButtonColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                    submitButtonText="Submit"
-                    styleItemsContainer={{
-                      maxHeight: scaleHeight * 170,
-                      zIndex: 5,
-                      backgroundColor: this.props.theme.BACKGROUND_COLOR,
-                    }}
-                    styleListContainer={{zIndex: 5}}
-                    styleSelectorContainer={{
-                      position: 'absolute',
-                      right: 0,
-                      left: 0,
-                      zIndex: 5,
-                    }}
-                    styleDropdownMenuSubsection={{
-                      height: scaleHeight * 45,
-                      backgroundColor: GRAY_LIGHT,
-                      borderRadius: scaleWidth * 25,
-                      paddingLeft: 15,
-                      paddingRight: 5,
-                    }}
-                    styleInputGroup={{
-                      height: scaleHeight * 45,
-                      backgroundColor: GRAY_LIGHT,
-                      borderRadius: scaleWidth * 25,
-                      paddingRight: 10,
-                    }}
-                  />
                 </View>
 
                 <TextInput
