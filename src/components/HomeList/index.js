@@ -107,7 +107,7 @@ class HomeList extends Component {
                 </View>
                
                 <Text
-                  numberOfLines={2}
+                  numberOfLines={1}
                   style={{
                     textAlign: 'left',
                     fontSize: Typography.FONT_SIZE_16,

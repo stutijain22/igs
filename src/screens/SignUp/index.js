@@ -7,7 +7,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
@@ -26,6 +26,7 @@ import {
   SCALE_40,
   SCALE_60,
 } from '../../styles/spacing';
+import Input from 'react-native-input-style';
 import {Spacing, Typography} from '../../styles';
 import {scaleHeight, scaleWidth} from '../../styles/scaling';
 import Globals from '../../constants/Globals';
@@ -37,9 +38,9 @@ import {bindActionCreators} from 'redux';
 import {showAlert} from '../../redux/action';
 
 var radio_props = [
-    {label: Globals.HOME, value: 0, valueIndex: 0},
-    {label: Globals.AJENT, value: 1, valueIndex: 0},
-  ];
+  {label: Globals.HOME, value: 0, valueIndex: 0},
+  {label: Globals.AJENT, value: 1, valueIndex: 0},
+];
 
 class Login extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class Login extends Component {
       location: '',
       password: '',
       method: 'login',
-      agent_id:'',
+      agent_id: '',
       isCustomerSelected: true,
       isBarberSelected: false,
       isShowPassword: false,
@@ -59,7 +60,7 @@ class Login extends Component {
       google_id: '',
       name: '',
       dob: '',
-      focus : false,
+      focus: false,
       phone_number: '',
       email_id: '',
       confirm_password: '',
@@ -71,7 +72,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-      //this.signUpCheckValidity();
+    //this.signUpCheckValidity();
     //        this.requestUserPermission();
   }
 
@@ -115,54 +116,37 @@ class Login extends Component {
   };
 
   onPressSignUp = () => {
-     // console.log('hhhhhhhhhhhhhhh');
     Keyboard.dismiss();
     this.signUpCheckValidity();
-   
   };
 
-  onPressSignIN = () => { 
+  onPressSignIN = () => {
     Keyboard.dismiss();
     this.props.navigation.navigate('Login');
   };
 
   signUpCheckValidity = () => {
-  //  console.log('hhhhhhhhhhhhhhhjjjjjjjjjjjjjjjjjjjjjjjjjj');
-   // console.log('hhhhhhhhhhhhhhh',this.state.selectedItems.length == 0)
-    if (
-      this.state.name.toString().trim().length == 0 
-    ) {
+    if (this.state.name.toString().trim().length == 0) {
+      this.props.showAlert(true, Globals.ErrorKey.WARNING, 'Please enter name');
+    } else if (this.state.dob.toString().trim().length == 0) {
       this.props.showAlert(
         true,
         Globals.ErrorKey.WARNING,
-        "Please enter name"
+        'Please enter date of birth',
       );
-    } else if (
-      this.state.dob.toString().trim().length == 0 
-    ) {
+    } else if (this.state.phone_number.toString().trim().length == 0) {
       this.props.showAlert(
         true,
         Globals.ErrorKey.WARNING,
-        "Please enter date of birth"
+        'Please enter phone number',
       );
-    } else if (
-      this.state.phone_number.toString().trim().length == 0
-    ) {
-      this.props.showAlert(
-        true,
-        Globals.ErrorKey.WARNING,
-        "Please enter phone number"
-      );
-    }  else {
-      
+    } else {
       this.props.navigation.navigate('OtpVerification');
       //this.uploadDocuments();
     }
   };
 
   render() {
-    const { focus } = this.state;
-   console.log('hhhhhhhhhhhh',JSON.stringify(focus));
     return (
       <CustomBGParent
         loading={this.state.loading}
@@ -203,96 +187,96 @@ class Login extends Component {
                 this.setState({value: value});
               }}
             />
-         
           </View>
 
           <View style={[styles.cardShadow, styles.margins]}>
-            
             <CustomBGCard
               topMargin={scaleHeight * 15}
               cornerRadius={scaleWidth * 15}
               bgColor={this.props.theme.CARD_BACKGROUND_COLOR}>
               <View style={styles.inputViewCards}>
                 {this.state.value == 0 && (
-                  <TextInput
-                    style={{
-                      fontSize: FONT_SIZE_16,
-                      height: scaleHeight * 50,
-                      marginTop: scaleHeight * 20,
-                    }}
-                    autoFocus={true}
-                   // onFocus={()=>{this.setState({focus:true})}}
-                  // onBlur={()=>{this.setState({focus:true})}}
-                    mode={'outlined'}
+                  <Input
+                    onlyEnglish
+                    keyboardType="default"
                     label="Agent id"
-                    onChangeText={text => this.setState({agent_id: text})}
+                    labelStyle={{
+                      backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
+                    }}
+                    formControlStyle={{
+                      borderColor:this.props.theme.BUTTON_BACKGROUND_COLOR,
+                    }}
+                    required
+                    contain=" "
+                    onInputChange={text => this.setState({agent_id: text})}
                     value={this.state.agent_id}
+                    outlined
+                    borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                   />
                 )}
-                <TextInput
-                style={{
-                  fontSize: FONT_SIZE_16,
-                  height: scaleHeight * 50,
-                  marginTop: scaleHeight * 20,
-                }}
-                 mode={'outlined'}
-                 autoFocus={true}
-                 // style={styles.textInputStyle}
-                  onChangeText={text => this.setState({name: text})}
+
+                <Input
+                  onlyEnglish
+                  keyboardType="default"
+                  required
+                  contain=" "
+                  labelStyle={{
+                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
+                  }}
+                 // errorText="Your name is invalid"
+                  onInputChange={text => this.setState({name: text})}
                   value={this.state.name}
                   label="Name"
+                  outlined
+                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                 />
 
-                <TextInput
-                style={{
-                  fontSize: FONT_SIZE_16,
-                  height: scaleHeight * 50,
-                  marginTop: scaleHeight * 20,
-                }}
-                //  style={styles.textInputStyle}
-                autoFocus={true}
-                  onChangeText={text =>
-                    this.setState({dob: text})
-                  }
-                  mode={'outlined'}
+                <Input
+                  onlyEnglish
+                  keyboardType="default"
+                  required
+                  contain=" "
+                  labelStyle={{
+                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
+                  }}
+                 // errorText="Your name is invalid"
+                  onInputChange={text => this.setState({dob: text})}
                   value={this.state.dob}
                   label="Date Of Birth"
+                  outlined
+                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                 />
 
-                <TextInput
-                style={{
-                  fontSize: FONT_SIZE_16,
-                  height: scaleHeight * 50,
-                  marginTop: scaleHeight * 20,
-                }}
-                autoFocus={true}
-                //  style={styles.textInputStyle}
+                <Input
+                  onlyEnglish
+                  labelStyle={{
+                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
+                  }}
+                  required
+                  contain=" "
+                 // errorText="Your name is invalid"
+                  onInputChange={text => this.setState({phone_number: text})}
                   keyboardType={'numeric'}
-                  onChangeText={text =>
-                    this.setState({phone_number: text})
-                  }
-                  label="Phone Number"  
-                  mode={'outlined'}
+                  label="Phone Number"
                   value={this.state.phone_number}
+                  outlined
+                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                 />
-
-
-                <TextInput
-                style={{
-                  fontSize: FONT_SIZE_16,
-                  height: scaleHeight * 50,
-                  marginTop: scaleHeight * 20,
-                }}
-                autoFocus={true}
-                 // style={styles.textInputStyle}
-                  onChangeText={text =>
-                    this.setState({email: text})
-                  }
+                <Input
+                  onlyEnglish
+                  labelStyle={{
+                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
+                  }}
+                  required
+                  contain=" "
+                 // errorText="Your name is invalid"
+                  onInputChange={text => this.setState({email: text})}
+                  keyboardType={'numeric'}
                   label="Email(optional)"
-                  mode={'outlined'}
                   value={this.state.email}
+                  outlined
+                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                 />
-
               </View>
             </CustomBGCard>
           </View>

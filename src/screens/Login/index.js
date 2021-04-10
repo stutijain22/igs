@@ -1,4 +1,4 @@
-import React, { useRef, useState , Component } from 'react';
+import React, {useRef, useState, Component} from 'react';
 import {
   ScrollView,
   View,
@@ -7,7 +7,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
@@ -30,6 +30,7 @@ import RadioForm from 'react-native-simple-radio-button';
 import {Spacing, Typography} from '../../styles';
 import {scaleHeight, scaleWidth} from '../../styles/scaling';
 import Globals from '../../constants/Globals';
+import Input from 'react-native-input-style';
 import {capitalize, isEmpty} from '../../utils/Utills';
 import {NavigationEvents} from 'react-navigation';
 import {connect} from 'react-redux';
@@ -62,7 +63,6 @@ class Login extends Component {
       signInButtonText: Globals.CUSTOMER_SIGN_IN,
       value: 0,
     };
-  
   }
 
   componentDidMount() {
@@ -98,7 +98,6 @@ class Login extends Component {
       this.barberClicked();
     }
   };
-
 
   barberClicked = async () => {
     await this.setState({
@@ -190,28 +189,22 @@ class Login extends Component {
               bgColor={this.props.theme.CARD_BACKGROUND_COLOR}>
               <View
                 style={{
-                  marginHorizontal: scaleWidth * 15,
                   marginBottom: scaleHeight * 60,
                   marginTop: scaleHeight * 20,
                 }}>
-
-                <TextInput
-                  style={{
-                    fontSize: FONT_SIZE_16,
-                    height: scaleHeight * 50,
-                    marginTop: scaleHeight * 20,
+                <Input
+                  onlyEnglish
+                  labelStyle={{
+                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
                   }}
-                  mode={'outlined'}
-                  //inputText={'outline'}
-                  label="Enter Your Phone"
-                  keyboardType={'phone-pad'}
-                  onChangeText={text =>
-                    text.length >= 10
-                      ? this.onPressText(text)
-                      : this.setState({emailOrPhone: text})
+                  onInputChange={text =>
+                  this.setState({emailOrPhone: text})
                   }
+                  label="Enter Your Phone Number"
+                  keyboardType={'phone-pad'}
                   value={this.state.emailOrPhone}
-                  // placeholder={'Enter Your Phone'}
+                  outlined
+                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                 />
               </View>
             </CustomBGCard>

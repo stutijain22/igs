@@ -1,68 +1,68 @@
 import React, {Component} from 'react';
 import {
-ActivityIndicator,
-FlatList,
-Image,
-RefreshControl,
-TouchableOpacity,
-Text,
-View,
-ScrollView,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+  Text,
+  View,
+  ScrollView,
 } from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import {BACK} from '../../images';
 import {Typography} from '../../styles';
-import { scaleSize } from "../../styles/mixins";
+import {scaleSize} from '../../styles/mixins';
 import {connect} from 'react-redux';
-import CustomButton from "../../components/CustomButton";
+import CustomButton from '../../components/CustomButton';
 import {showGloblePopup} from '../../actions/showGloblePopup';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import EmptyView from '../../components/EmptyView';
-import HomeList from "../../components/HomeList";
+import HomeList from '../../components/HomeList';
 import Globals from '../../constants/Globals';
 import {scaleHeight, scaleWidth} from '../../styles/scaling';
 import {
-SCALE_100,
-SCALE_15,
-SCALE_20,
-SCALE_25,
-SCALE_50,
-SCALE_200,
+  SCALE_100,
+  SCALE_15,
+  SCALE_20,
+  SCALE_25,
+  SCALE_50,
+  SCALE_200,
 } from '../../styles/spacing';
 import {
-FONT_SIZE_10,
-FONT_SIZE_13,
-FONT_SIZE_16,
-FONT_SIZE_25,
-FONT_SIZE_30,
+  FONT_SIZE_10,
+  FONT_SIZE_13,
+  FONT_SIZE_16,
+  FONT_SIZE_25,
+  FONT_SIZE_30,
 } from '../../styles/typography';
 import {isEmpty} from '../../utils/Utills';
 import entries from './entries';
 import styles from './styles';
 
 class Dashboard extends Component {
-constructor(props) {
-  const {navigation} = props;
-  super(props);
-  this.state = {
-    loading: false,
-    is_doctor: false,
-    category: entries.ENTRIES,
-    swipeRefreshing: false,
-    pageCount: 1,
-    totalPageCount: 0,
-    refreshing: false,
-    type: '',
-    discription: '',
-    //image: apiConstant.NO_IMAGE_URL,
-  };
+  constructor(props) {
+    const {navigation} = props;
+    super(props);
+    this.state = {
+      loading: false,
+      is_doctor: false,
+      category: entries.ENTRIES,
+      swipeRefreshing: false,
+      pageCount: 1,
+      totalPageCount: 0,
+      refreshing: false,
+      type: '',
+      discription: '',
+      //image: apiConstant.NO_IMAGE_URL,
+    };
 
-  // this.getdeviceId();
-  //this.GetLoginData();
-}
+    // this.getdeviceId();
+    //this.GetLoginData();
+  }
 
-/*  GetLoginData = async () => {
+  /*  GetLoginData = async () => {
   const user_data = await getJSONData('user');
   if (user_data != null) {
     if (user_data.type == 'Doctor') {
@@ -146,122 +146,129 @@ getCategory = () => {
 }; 
 */
 
-onClickItem = () => {
-  this.props.navigation.navigate('CreateService');
-}
+  onClickItem = (item) => {
+    this.props.navigation.navigate('DetailScreen',{detail: item});
+  };
 
-renderItem = ({item}) => {
-  return (
+  renderItem = ({item}) => {
+    return (
       <HomeList
-      onItemPress={() => this.onClickItem(item)}
-      viewWidth={scaleWidth * 330}
-      viewHeight={scaleHeight * 120}
-      item={item}
-    />
-  );
-};
+        onItemPress={() => this.onClickItem(item)}
+        viewWidth={scaleWidth * 330}
+        viewHeight={scaleHeight * 120}
+        item={item}
+      />
+    );
+  };
 
+  onRefresh = async () => {
+    await this.setState({swipeRefreshing: true});
+  };
 
-
-onRefresh = async () => {
-  await this.setState({swipeRefreshing: true});
-};
-
-LoadMoreRandomData = async () => {
-  if (this.state.pageCount < this.state.totalPageCount) {
-    await this.setState({pageCount: this.state.pageCount + 1});
-  }
-};
-
-createService = () => {
-  this.props.navigation.navigate('CreateService');
-}
-
-renderFooter = () => {
-  try {
-    if (this.state.refreshing) {
-      return (
-        <View
-          style={{
-            paddingVertical: scaleHeight * 5,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-          }}>
-          <ActivityIndicator
-            size="large"
-            color={this.props.theme.BUTTON_BACKGROUND_COLOR}
-          />
-        </View>
-      );
-    } else {
-      return <View></View>;
+  LoadMoreRandomData = async () => {
+    if (this.state.pageCount < this.state.totalPageCount) {
+      await this.setState({pageCount: this.state.pageCount + 1});
     }
-  } catch (error) {
-    //console.log('error');
-  }
-};
+  };
 
-render() {
-  //console.log('name', this.props.navigation.getParam('name'));
-  const {category} = this.state;
-  const {theme} = this.props;
-  console.log('theme dashboard ', theme);
+  createService = () => {
+    this.props.navigation.navigate('CreateService');
+  };
 
-  return (
-    <CustomBGParent
-      backGroundColor={'white'}
-      // loading={this.state.loading}
-      topPadding={false}>
-      <View>
-      <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: scaleHeight * 25,
-          }}>
+  renderFooter = () => {
+    try {
+      if (this.state.refreshing) {
+        return (
           <View
             style={{
-              position: "absolute",
-              left: 30,
-              height: scaleHeight * 25,
-              justifyContent: Platform.OS === "android" ? "flex-end" : "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
+              paddingVertical: scaleHeight * 5,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+            }}>
+            <ActivityIndicator
+              size="large"
+              color={this.props.theme.BUTTON_BACKGROUND_COLOR}
+            />
+          </View>
+        );
+      } else {
+        return <View></View>;
+      }
+    } catch (error) {
+      //console.log('error');
+    }
+  };
+
+  render() {
+    //console.log('name', this.props.navigation.getParam('name'));
+    const {category} = this.state;
+    const {theme} = this.props;
+    console.log('theme dashboard ', theme);
+
+    return (
+      <CustomBGParent
+        backGroundColor={'white'}
+        // loading={this.state.loading}
+        topPadding={false}>
+        <View>
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: scaleHeight * 25,
+            }}>
+            <View
               style={{
-                fontSize: Typography.FONT_SIZE_16,
-                color: this.props.theme.PRIMARY_TEXT_COLOR,
-                fontWeight: "bold",
-              }}
-            >
-              Your request
-            </Text>
+                position: 'absolute',
+                left: 30,
+                height: scaleHeight * 25,
+                justifyContent:
+                  Platform.OS === 'android' ? 'flex-end' : 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: Typography.FONT_SIZE_16,
+                  color: this.props.theme.PRIMARY_TEXT_COLOR,
+                  fontWeight: 'bold',
+                }}>
+                Your request
+              </Text>
+            </View>
+            <View
+              style={{
+                height: scaleHeight * 25,
+                position: 'absolute',
+                right: scaleWidth * 20,
+                alignItems: 'center',
+                justifyContent:
+                  Platform.OS === 'android' ? 'flex-end' : 'center',
+              }}>
+              <CustomButton
+                buttonStyle={[
+                  styles.buttonsShadow,
+                  {backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR},
+                ]}
+                onPress={() => this.createService()}
+                textStyle={{
+                  fontSize: FONT_SIZE_16,
+                  color: this.props.theme.BUTTON_TEXT_COLOR,
+                }}
+                buttonText={'Create Request'}
+                cornerRadius={20}
+                buttonHeight={SCALE_25}
+                buttonWidth={scaleSize(130)}
+              />
+            </View>
           </View>
-<View style={{
-            height: scaleHeight * 25,
-            position: 'absolute',
-            right: scaleWidth * 20,
-            alignItems: 'center',
-            justifyContent: Platform.OS === 'android' ? 'flex-end' : 'center'
-          }}>
-            <CustomButton
-              buttonStyle={[styles.buttonsShadow, { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR }]}
-              onPress={() => this.createService()}
-              textStyle={{ fontSize: FONT_SIZE_16, color: this.props.theme.BUTTON_TEXT_COLOR }}
-              buttonText={"Create Request"}
-              cornerRadius={20} buttonHeight={SCALE_25} buttonWidth={scaleSize(130)} />
-          </View>
-        </View>
-         <View
-          style={{
-            marginHorizontal: SCALE_15,
-            marginBottom: scaleHeight * 50,
-          }}>
-          
+          <View
+            style={{
+              marginHorizontal: SCALE_15,
+              marginBottom: scaleHeight * 50,
+            }}>
             <FlatList
               data={category}
               extraData={this.state}
@@ -276,16 +283,14 @@ render() {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
             />
-        
+          </View>
         </View>
-      </View>
-    </CustomBGParent>
-  );
-}
+      </CustomBGParent>
+    );
+  }
 }
 const mapStateToProps = state => ({
   theme: state.themeReducer.theme,
 });
-
 
 export default connect(mapStateToProps)(Dashboard);
