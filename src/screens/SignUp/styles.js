@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         borderColor: GRAY_DARK,
     },
     inputViewCards: {
-      //  marginHorizontal: scaleWidth * 15,
+        marginHorizontal: scaleWidth * 15,
         marginBottom: scaleHeight * 60,
         marginTop: scaleHeight * 20
     }

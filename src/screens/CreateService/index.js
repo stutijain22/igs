@@ -14,12 +14,15 @@ import {Typography} from '../../styles';
 import {BACK} from '../../images';
 import {scaleWidth, scaleHeight} from '../../styles/scaling';
 import CustomBGCard from '../../components/CustomBGCard';
-import { GRAY_LIGHT } from "../../styles/colors";
+import {GRAY_LIGHT} from '../../styles/colors';
 import CustomBGParent from '../../components/CustomBGParent';
 import {ScrollView} from 'react-native-gesture-handler';
 import {isNetAvailable} from '../../utils/NetAvailable';
 import {getJSONData, storeJSONData, clearStore} from '../../utils/AsyncStorage';
-import {fetchServerDataPost} from '../../utils/FetchServerRequest';
+import {
+  fetchServerDataPost,
+  fetchServerDataGet,
+} from '../../utils/FetchServerRequest';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {NavigationEvents} from 'react-navigation';
 import CustomButton from '../../components/CustomButton';
@@ -35,7 +38,7 @@ import {showAlert} from '../../redux/action';
 import MultiSelect from '../../components/MultiSelectDropDown';
 import {getDate} from '../../utils/DateTimeUtills';
 
-const items = [
+/*const items = [
   {
     id: '92iijs7yta',
     name: 'Ondo',
@@ -72,7 +75,7 @@ const items = [
     id: 'suudydjsjd',
     name: 'Abuja',
   },
-];
+];*/
 
 class CreateService extends Component {
   constructor(props) {
@@ -82,14 +85,123 @@ class CreateService extends Component {
       show: false,
       date: new Date(),
       // userType: Globals.PATIENT,
-      inputtext: '',
+      feedbacktext: '',
+      UserID: "3",
+      TicketNumber: '',
+      CreatedByUserID: '1',
+      AssignedToUserID: null,
+      service_problem: [],
       //selectedItems: [],
     };
   }
 
-  componentDidMount() {
-    this.initialState = this.state;
+  GetLoginData = async () => {
+    const user_data = await getJSONData('user');
+    if (user_data != null) {
+      /*  if (user_data.type == 'Agent') {
+        await this.setState({is_flag: true});
+      }*/
+      await this.setState({
+        Token: user_data.Token,
+        // name: user_data.name,
+      });
+    }
+    await this.getAllService();
+  };
+
+  async componentDidMount() {
+    await this.GetLoginData();
   }
+
+  getAllService = () => {
+    let url = apiConstant.GET_ALL_SERVICE_PROBLEMS;
+
+    let headers = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.state.Token,
+    };
+
+    console.log('url ==> ' + JSON.stringify(url));
+    console.log('headers ==> ' + JSON.stringify(headers));
+
+    isNetAvailable().then(success => {
+      if (success) {
+        fetchServerDataGet(url, headers)
+          .then(async response => {
+            let data = await response.json();
+            console.log('data problem => ', JSON.stringify(data));
+            if (data.status === 200) {
+              this.setState({loading: false});
+              this.setState({service_problem: data.data});
+            } else {
+              this.setState({loading: false});
+              this.props.showAlert(
+                true,
+                Globals.ErrorKey.NETWORK_ERROR,
+                'Please check network connection.',
+              );
+            }
+          })
+          .catch(error => {
+            this.setState({loading: false});
+            this.props.showAlert(
+              true,
+              Globals.ErrorKey.ERROR,
+              Globals._KEYS._SOMETHING_WENT_WRONG,
+            );
+          });
+      } else {
+        this.setState({loading: false});
+        this.props.showAlert(
+          true,
+          Globals.ErrorKey.NETWORK_ERROR,
+          'Please check network connection.',
+        );
+      }
+    });
+  };
+
+  createService = () => {
+    const url = apiConstant.CREATE_SERVICE_TICKET;
+    const headers = {
+      // 'Content-Type': 'application/json',
+     // 'Accept':'application/json',
+      Authorization: 'Bearer ' + this.state.Token,
+    };
+
+    const requestBody = {
+      UserID: this.state.UserID,
+      TicketNumber: this.state.TicketNumber,
+      ServiceProblemID: this.state.selectedItems[0],
+      Description: this.state.feedbacktext,
+      CreatedByUserID: this.state.CreatedByUserID,
+      AssignedToUserID: this.state.AssignedToUserID,
+    };
+
+    console.log('create url ==> ' + JSON.stringify(url));
+    console.log('create headers ==> ' + JSON.stringify(headers));
+    console.log('create response ==> ' + JSON.stringify(requestBody));
+
+   isNetAvailable().then(success => {
+        if (success) {
+            fetchServerDataPost(url, requestBody, headers).then(async (response) => {
+              console.log('responsessssssssssssssss',JSON.stringify(response));
+                let data = await response.json();
+                console.log('data ==> ' + JSON.stringify(data));
+                if (data.status === 500) {
+                    await this.setState({ loading: false });
+                    await this.setState({service_problem: data.data});
+                }
+            }).catch(error => {
+                this.setState({ loading: false });
+                console.log("Login error : ", error);
+            });
+        } else {
+            this.setState({ loading: false });
+            this.props.showAlert(true, Globals.ErrorKey.NETWORK_ERROR, 'Please check network connection.');
+        }
+    });
+  };
 
   clearStore = () => {
     this.setState({
@@ -117,7 +229,7 @@ class CreateService extends Component {
     return true;
   };
 
-  updateProfile = async () => {
+  service_create = async () => {
     this.signUpCheckValidity();
   };
 
@@ -143,14 +255,15 @@ class CreateService extends Component {
   };
 
   onSubmitClick = async () => {
-   // await this.getBarberCurrentLocation();
-    console.log("onSubmitClick" + JSON.stringify(this.state.selectedItems));
+    // await this.getBarberCurrentLocation();
+    console.log('onSubmitClick' + JSON.stringify(this.state.selectedItems));
   };
 
-  signUpCheckValidity = () => {
+  signUpCheckValidity = async () => {
     if (this.state.feedbacktext.toString().trim().length == 0) {
       this.props.showAlert(true, Globals.ErrorKey.WARNING, 'Please enter text');
     } else {
+      await this.createService();
       // this.feedback();
     }
   };
@@ -234,15 +347,12 @@ class CreateService extends Component {
   onSelectedItemsChange = async selectedItems => {
     console.log('selectedItems' + JSON.stringify(selectedItems));
     this.setState({selectedItems});
-    // await this.getBarberCurrentLocation();
-  };
-
-  onSubmitClick = () => {
-    //console.log("onSubmitClick" + JSON.stringify(this.state.selectedItems));
+    await this.getAllService();
   };
 
   render() {
     const {selectedItems} = this.state;
+    const {service_problem} = this.state;
     return (
       <CustomBGParent loading={this.state.loading} topPadding={false}>
         <NavigationEvents
@@ -310,36 +420,43 @@ class CreateService extends Component {
                   }}>
                   <MultiSelect
                     hideTags
-                    items={items}
-                    uniqueKey="id"
+                    items={service_problem}
+                    uniqueKey="ServiceProblemID"
                     ref={component => {
                       this.multiSelect = component;
                     }}
-                    onSubmitClick={() => this.onSubmitClick()}
+                    //onSubmitClick={() => this.onSubmitClick()}
                     onSelectedItemsChange={this.onSelectedItemsChange}
                     selectedItems={selectedItems}
                     selectText="Pick Items"
-                    searchInputPlaceholderText="Search Items..."
+                    single={true}
+                    searchInputPlaceholderText="Search Problem..."
                     onChangeInput={text => console.log(text)}
-                   //altFontFamily="ProximaNova-Light"
-                   tagRemoveIconColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                   tagBorderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                   tagTextColor="#CCC"
-                   selectedItemTextColor={this.props.theme.SECONDARY_TEXT_COLOR}
-                   selectedItemIconColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                   itemTextColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                   displayKey="name"
-                   searchInputStyle={{ color: "#CCC" }}
-                   submitButtonColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                   submitButtonText="Submit"
-                   styleItemsContainer={{
-                     maxHeight: scaleHeight * 150,
-                     zIndex: 5,
-                     backgroundColor: this.props.theme.BACKGROUND_COLOR,
-                   }}
-                    styleListContainer={{ zIndex: 5 }}
+                    //altFontFamily="ProximaNova-Light"
+                    tagRemoveIconColor={
+                      this.props.theme.BUTTON_BACKGROUND_COLOR
+                    }
+                    tagBorderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                    tagTextColor="#CCC"
+                    selectedItemTextColor={
+                      this.props.theme.SECONDARY_TEXT_COLOR
+                    }
+                    selectedItemIconColor={
+                      this.props.theme.BUTTON_BACKGROUND_COLOR
+                    }
+                    itemTextColor={this.props.theme.PRIMARY_TEXT_COLOR}
+                    displayKey="ProblemName"
+                    searchInputStyle={{color: '#CCC'}}
+                    submitButtonColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                    submitButtonText="Submit"
+                    styleItemsContainer={{
+                      maxHeight: scaleHeight * 150,
+                      zIndex: 5,
+                      backgroundColor: this.props.theme.BACKGROUND_COLOR,
+                    }}
+                    styleListContainer={{zIndex: 5}}
                     styleSelectorContainer={{
-                      position: "absolute",
+                      position: 'absolute',
                       right: 0,
                       left: 0,
                       zIndex: 5,
@@ -389,12 +506,12 @@ class CreateService extends Component {
                           .BUTTON_BACKGROUND_COLOR,
                       },
                     ]}
-                    onPress={() => this.updateProfile()}
+                    onPress={() => this.service_create()}
                     textStyle={{
                       fontSize: FONT_SIZE_16,
                       color: this.props.theme.BUTTON_TEXT_COLOR,
                     }}
-                    buttonText={'Submit'}
+                    buttonText={'Create Ticket'}
                     cornerRadius={20}
                     buttonHeight={SCALE_25}
                     buttonWidth={scaleSize(100)}

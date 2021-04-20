@@ -45,12 +45,14 @@ class OtpVerification extends Component {
       otpSentButtonText: "Didn't receive otp?",
       code: '',
       timer: 30,
+      userType: this.props.navigation.getParam('userType')
       // fromScreen: navigation.getParam('from'),
       // requestBody: navigation.getParam('requestBody')
     };
   }
 
   componentDidMount() {
+    console.log('userTypeeeeeeeee',JSON.stringify(this.state.userType));
     this.setState({
       headerText: 'Verify OTP',
       subHeaderText:
@@ -111,6 +113,11 @@ class OtpVerification extends Component {
   };
 
   onClick = () => {
+  /*  if (this.state.userType == 0) {
+      this.props.navigation.navigate('HomeNavigation');
+    } else {
+      this.props.navigation.navigate('AgentNavigation');
+    }*/
     this.props.navigation.navigate('Dashboard');
   };
 

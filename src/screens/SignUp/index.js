@@ -67,6 +67,7 @@ class Login extends Component {
       userType: Globals.CUSTOMER,
       fcmToken: '',
       value: 0,
+      isFocused: false,
       signInButtonText: Globals.CUSTOMER_SIGN_UP,
     };
   }
@@ -95,7 +96,7 @@ class Login extends Component {
     });
   };
 
-  _onFocus = () => {
+ /* _onFocus = () => {
     const {navigation} = this.props;
     const userType = navigation.getParam('userType');
     if (userType === Globals.CUSTOMER) {
@@ -104,7 +105,7 @@ class Login extends Component {
     if (userType === Globals.AJENT) {
       this.barberClicked();
     }
-  };
+  };*/
 
   barberClicked = async () => {
     await this.setState({
@@ -118,6 +119,10 @@ class Login extends Component {
   onPressSignUp = () => {
     Keyboard.dismiss();
     this.signUpCheckValidity();
+  };
+
+  onFocusChange = () => {
+    this.setState({isFocused: false});
   };
 
   onPressSignIN = () => {
@@ -196,86 +201,61 @@ class Login extends Component {
               bgColor={this.props.theme.CARD_BACKGROUND_COLOR}>
               <View style={styles.inputViewCards}>
                 {this.state.value == 0 && (
-                  <Input
-                    onlyEnglish
+                  <TextInput
                     keyboardType="default"
+                    returnKeyType={'next'}
                     label="Agent id"
-                    labelStyle={{
-                      backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
-                    }}
-                    formControlStyle={{
-                      borderColor:this.props.theme.BUTTON_BACKGROUND_COLOR,
-                    }}
-                    required
-                    contain=" "
-                    onInputChange={text => this.setState({agent_id: text})}
+                    autoFocus={true}
                     value={this.state.agent_id}
-                    outlined
-                    borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                    mode="outlined"
+                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                    onChangeText={text => this.setState({agent_id: text})}
                   />
                 )}
 
-                <Input
-                  onlyEnglish
+                <TextInput
+                 // onFocus={this.onFocusChange}
                   keyboardType="default"
-                  required
-                  contain=" "
-                  labelStyle={{
-                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
-                  }}
-                 // errorText="Your name is invalid"
-                  onInputChange={text => this.setState({name: text})}
+                  returnKeyType="next"
                   value={this.state.name}
                   label="Name"
-                  outlined
-                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                  // autoFocus
+                  mode="outlined"
+                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                  onChangeText={text => this.setState({name: text})}
                 />
 
-                <Input
-                  onlyEnglish
+                <TextInput
+                 // onFocus={this.onFocusChange}
                   keyboardType="default"
-                  required
-                  contain=" "
-                  labelStyle={{
-                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
-                  }}
-                 // errorText="Your name is invalid"
-                  onInputChange={text => this.setState({dob: text})}
+                  returnKeyType="next"
                   value={this.state.dob}
                   label="Date Of Birth"
-                  outlined
-                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                  mode="outlined"
+                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                  onChangeText={text => this.setState({dob: text})}
                 />
 
-                <Input
-                  onlyEnglish
-                  labelStyle={{
-                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
-                  }}
-                  required
-                  contain=" "
-                 // errorText="Your name is invalid"
-                  onInputChange={text => this.setState({phone_number: text})}
+                <TextInput
+                 // onFocus={this.onFocusChange}
                   keyboardType={'numeric'}
                   label="Phone Number"
                   value={this.state.phone_number}
-                  outlined
-                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                  returnKeyType="next"
+                  mode="outlined"
+                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                  onChangeText={text => this.setState({phone_number: text})}
                 />
-                <Input
-                  onlyEnglish
-                  labelStyle={{
-                    backgroundColor: this.props.theme.CARD_BACKGROUND_COLOR,
-                  }}
-                  required
-                  contain=" "
-                 // errorText="Your name is invalid"
-                  onInputChange={text => this.setState({email: text})}
+
+                <TextInput
+                 // onFocus={this.onFocusChange}
                   keyboardType={'numeric'}
                   label="Email(optional)"
                   value={this.state.email}
-                  outlined
-                  borderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
+                  returnKeyType="done"
+                  mode="outlined"
+                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                  onChangeText={text => this.setState({email: text})}
                 />
               </View>
             </CustomBGCard>

@@ -258,7 +258,7 @@ class DetailScreen extends Component {
                 color: this.props.theme.PRIMARY_TEXT_COLOR,
                 fontWeight: 'bold',
               }}>
-              Payment Detail
+              Service Detail
             </Text>
           </View>
         </View>

@@ -46,10 +46,10 @@ import {
   FONT_SIZE_30,
 } from '../../styles/typography';
 import {isEmpty} from '../../utils/Utills';
-import entries from './entries';
+//import entries from './entries';
 import styles from './styles';
 
-class Dashboard extends Component {
+class AgentDashboard extends Component {
   constructor(props) {
     const {navigation} = props;
     super(props);
@@ -300,4 +300,4 @@ const mapDispatchToProps = dispatch => ({
   showAlert: bindActionCreators(showAlert, dispatch),
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps,mapDispatchToProps)(AgentDashboard);

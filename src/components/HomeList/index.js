@@ -54,7 +54,7 @@ class HomeList extends Component {
                     color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                     fontWeight: 'normal',
                   }}>
-                  {isEmpty(false, this.props.item.requestId)}
+                  {isEmpty(false, this.props.item.TicketNumber)}
                 </Text>
 
                 <View
@@ -102,7 +102,7 @@ class HomeList extends Component {
                       color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                       fontWeight: 'bold',
                     }}>
-                    {isEmpty(false, this.props.item.title)}
+                    {isEmpty(false, this.props.item.ProblemName)}
                   </Text>
                 </View>
                
@@ -114,7 +114,7 @@ class HomeList extends Component {
                     color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                     fontWeight: 'normal',
                   }}>
-                  {isEmpty(false, this.props.item.discription)}
+                  {isEmpty(false, this.props.item.Description)}
                 </Text>
               </View>
               <View style={{margin: scaleWidth * 10, flexDirection:'row',
