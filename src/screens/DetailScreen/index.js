@@ -49,6 +49,7 @@ class DetailScreen extends Component {
     this.state = {
       show: false,
       date: new Date(),
+      loading: false,
       // userType: Globals.PATIENT,
       inputtext: '',
       //selectedItems: [],

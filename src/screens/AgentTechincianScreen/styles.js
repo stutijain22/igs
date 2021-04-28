@@ -9,11 +9,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  animatedBox: {
-    flex: 1,
-    backgroundColor: "#38C8EC",
-    padding: 10
-  }, 
   nextIcon: {
     width: scaleHeight * 30,
     height: scaleHeight * 30,

@@ -38,8 +38,10 @@ import {bindActionCreators} from 'redux';
 import {showAlert} from '../../redux/action';
 
 var radio_props = [
-  {label: Globals.HOME, value: 0, valueIndex: 0},
-  {label: Globals.AJENT, value: 1, valueIndex: 0},
+  {label: Globals.HOME, value: 0},
+  {label: Globals.AJENT, value: 1},
+  {label: Globals.ADMIN, value: 2},
+  {label: Globals.TECHNICIAN, value: 3},
 ];
 
 class Login extends Component {
@@ -198,7 +200,8 @@ class Login extends Component {
             <CustomBGCard
               topMargin={scaleHeight * 15}
               cornerRadius={scaleWidth * 15}
-              bgColor={this.props.theme.CARD_BACKGROUND_COLOR}>
+            //  bgColor={this.props.theme.CARD_BACKGROUND_COLOR}
+              >
               <View style={styles.inputViewCards}>
                 {this.state.value == 0 && (
                   <TextInput

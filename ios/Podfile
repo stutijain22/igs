@@ -16,6 +16,10 @@ target 'IGS' do
 
   pod 'react-native-razorpay', :path => '../node_modules/react-native-razorpay'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'IGSTests' do
     inherit! :complete
     # Pods for testing

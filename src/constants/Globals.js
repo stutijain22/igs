@@ -1,6 +1,8 @@
 export const COUNTRY_CODE = '+91';
 export const AJENT = 'Agent';
 export const HOME = 'HOME';
+export const ADMIN = 'Admin';
+export const TECHNICIAN = 'Technician';
 
 export const HOURS_PICKER_VALUE = [{
     value: '0',
@@ -80,6 +82,8 @@ export default {
     },
 
     AJENT: 'Agent',
+    ADMIN: 'Admin',
+    TECHNICIAN: 'Technician',
     AUTH_LOGIN:'AuthLogin',
     HOME: 'Home',
     AJENT_SIGN_IN: 'Agent Sign In',

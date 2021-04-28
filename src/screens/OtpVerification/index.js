@@ -5,7 +5,7 @@ import CustomTextView from '../../components/CustomTextView';
 import styles from './styles';
 import CustomButton from '../../components/CustomButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {storeData, storeJSONData} from '../../utils/AsyncStorage';
+import {storeData, storeJSONData,getJSONData} from '../../utils/AsyncStorage';
 import Globals from '../../constants/Globals';
 import { showAlert } from '../../redux/action'
 import {connect} from 'react-redux';
@@ -45,14 +45,27 @@ class OtpVerification extends Component {
       otpSentButtonText: "Didn't receive otp?",
       code: '',
       timer: 30,
-      userType: this.props.navigation.getParam('userType')
+    //  userType: this.props.navigation.getParam('userType')
       // fromScreen: navigation.getParam('from'),
       // requestBody: navigation.getParam('requestBody')
     };
   }
 
-  componentDidMount() {
-    console.log('userTypeeeeeeeee',JSON.stringify(this.state.userType));
+  GetLoginData = async () => {
+    const user_data = await getJSONData('user');
+    if (user_data != null) {
+     /* if (user_data.type == 'Agent') {
+        await this.setState({is_flag: true});
+      }*/
+      await this.setState({
+        Token: user_data.Token,
+       // name: user_data.name,
+      });
+    }
+    //await this.getCreatedService();
+  };
+
+  async componentDidMount() {
     this.setState({
       headerText: 'Verify OTP',
       subHeaderText:
@@ -71,29 +84,34 @@ class OtpVerification extends Component {
       1000,
     );
 
-    /*  if (this.state.fromScreen === 'ForgotPassword') {
-            this.setState({
-                headerText: "Forgot Password?",
-                subHeaderText: "You'll shortly receive an OTP on email or phone number to setup a new password.",
-                buttonText: "Restore Password",
-            });
-        }
-        if (this.state.fromScreen === 'SignUp') {
-            this.setState({
-                headerText: "Verify Your Email Or Number",
-                subHeaderText: "An OTP is sent to your registered email or mobile number.",
-                buttonText: "Verify Now",
-            });
-        }
-        if (this.state.fromScreen === 'AuthLoading' || this.state.fromScreen === 'Login') {
-            this.setState({
-                headerText: "Verify Your Email Or Number",
-                subHeaderText: "An OTP is sent to your registered email or mobile number.",
-                buttonText: "Verify Now",
-            });
-            this.resendOtp();
-        }*/
+   // const user_data = await getJSONData('user');
+  //await this.Login(user_data);
   }
+
+ /* Login = async (value) => {
+    const { navigation } = this.props;
+    const userType = await getJSONData('value');
+    console.log('userTypeeeeeeeee',JSON.stringify(userType));
+
+    
+    console.log('value',value);
+    if (value == null) {
+        navigation.navigate(Globals.AUTH_LOGIN);
+    } else {
+        if (value.userType == 0) {
+      this.props.navigation.navigate('HomeNavigation');
+        }else if(value.userType == 1) {
+          this.props.navigation.navigate('AgentNavigation');
+        }
+        else if(value.userType == 2) {
+          this.props.navigation.navigate('AdminNavigation');
+        }
+        else{
+          this.props.navigation.navigate('TechnicianNavigation');
+        }
+  
+    }
+  };*/
 
   componentDidUpdate() {
     if (this.state.timer === 0) {
@@ -112,13 +130,22 @@ class OtpVerification extends Component {
     });
   };
 
-  onClick = () => {
-  /*  if (this.state.userType == 0) {
+  onClick = async () => {
+    const user_data = await getJSONData('user');
+
+   if (user_data.UserType == "Home") {
       this.props.navigation.navigate('HomeNavigation');
-    } else {
+    } 
+    else if(user_data.UserType == "Agent") {
       this.props.navigation.navigate('AgentNavigation');
-    }*/
-    this.props.navigation.navigate('Dashboard');
+    }
+    else if(user_data.UserType == "Admin") {
+      this.props.navigation.navigate('AdminNavigation');
+    }
+    else{
+      this.props.navigation.navigate('TechnicianNavigation');
+    }
+   // this.props.navigation.navigate('HomeNavigation');
   };
 
 

@@ -16,7 +16,8 @@ const AppNavigator = createSwitchNavigator({
           },
         },
       }),
-    /*  AgentNavigation: createStackNavigator({
+
+     AgentNavigation: createStackNavigator({
         AgentNavigation: {
           screen: AgentNavigation,
           navigationOptions: {
@@ -48,7 +49,7 @@ const AppNavigator = createSwitchNavigator({
             headerShown: false,
           },
         },
-      }),*/
+      }),
   
     initialRouteName: 'AuthLogin'
 });

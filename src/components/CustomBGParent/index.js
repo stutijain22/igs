@@ -3,6 +3,7 @@ import { Platform, StatusBar, StyleSheet, View, TouchableWithoutFeedback, Keyboa
 import { ifIphoneX } from "../../utils/iPhoneXHelper";
 import { PRIMARY, WHITE } from "../../styles/colors";
 import PropTypes from 'prop-types';
+import Spinner from 'react-native-loading-spinner-overlay';
 import styles, { STATUSBAR_HEIGHT } from "./styles";
 import { connect } from 'react-redux'
 
@@ -34,11 +35,17 @@ class CustomBGParent extends Component {
                         translucent backgroundColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                         barStyle="light-content" />}
 
-                    <View style={[styles.content, { backgroundColor: this.props.theme.BACKGROUND_COLOR, paddingTop: this.props.topPadding ? STATUSBAR_HEIGHT : 0 }]}>
+                    <View style={[styles.content, { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR, paddingTop: this.props.topPadding ? STATUSBAR_HEIGHT : 0 }]}>
                         
                         {this.props.children}
                     </View>
 
+                    <Spinner
+                        overlayColor={"rgba(34, 60, 83, 0.6)"}
+                        visible={this.props.loading}
+                        textContent={'Loading...'}
+                        textStyle={{ color: '#FFF' }}
+                    />
                 </View>
             //</TouchableWithoutFeedback>
 

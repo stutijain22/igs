@@ -7,15 +7,9 @@ import CreateService from "../screens/CreateService";
 import DetailScreen from "../screens/DetailScreen";
 
 export default createStackNavigator({
-   // Welcome,
     Login,
     SignUp,
     OtpVerification,
-    Dashboard,
-    CreateService,
-    DetailScreen
-   // ForgotPassword,
-   // ResetPassword
 },
     {
         headerShown: false,

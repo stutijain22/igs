@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, LogBox } from 'react-native';
-import Navigator from './src/navigations/Navigation'
-import NavigationService from './src/navigations/NavigationService'
+import Navigator from './src/navigations/Navigation';
+import SplashScreen from 'react-native-splash-screen';
+import NavigationService from './src/navigations/NavigationService';
 import { connect } from 'react-redux';
 import AlertPopUp from './src/components/AlertPopUp'
 
@@ -13,6 +14,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 3000);
   }
 
   componentWillUnmount() {

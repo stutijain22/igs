@@ -29,6 +29,7 @@ export const darkTheme = {
   SHIMMER_COLOR_2: '#c5c5c5',
   SHIMMER_COLOR_3: '#ebebeb',
   RED:'#FF0000',
+  WHITE:'#FFFFFF',
   YELLOW:'#FFFF00',
   GREEN:'#008000',
   GRAY:'#808080'
@@ -65,6 +66,7 @@ export const lightTheme = {
   SHIMMER_COLOR_2: '#c5c5c5',
   SHIMMER_COLOR_3: '#ebebeb',
   RED:'#FF0000',
+  WHITE:'#FFFFFF',
   YELLOW:'#FFFF00',
   GREEN:'#008000',
   GRAY:'#808080'

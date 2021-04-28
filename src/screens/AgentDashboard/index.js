@@ -8,26 +8,30 @@ import {
   Text,
   View,
   ScrollView,
+  BackHandler
 } from 'react-native';
 import {
   fetchServerDataPost,
   fetchServerDataGet,
 } from '../../utils/FetchServerRequest';
-import {getJSONData} from '../../utils/AsyncStorage';
+import {getJSONData,clearStore} from '../../utils/AsyncStorage';
 import {showAlert} from '../../redux/action';
 import apiConstant from '../../constants/apiConstant';
 import {isNetAvailable} from '../../utils/NetAvailable';
 import {bindActionCreators} from 'redux';
-import {NavigationEvents} from 'react-navigation';
+import {MENU,LOGO,PENCIL,LOGOUT} from '../../images';
+import ConfirmationPopUp from "../../components/ConfirmationPopUp";
+import {NavigationEvents,NavigationActions} from 'react-navigation';
 import {BACK} from '../../images';
 import {Typography} from '../../styles';
 import {scaleSize} from '../../styles/mixins';
 import {connect} from 'react-redux';
+import MenuDrawer from 'react-native-side-drawer';
 import CustomButton from '../../components/CustomButton';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import EmptyView from '../../components/EmptyView';
-import HomeList from '../../components/HomeList';
+import AgentList from '../../components/AgentList';
 import Globals from '../../constants/Globals';
 import {scaleHeight, scaleWidth} from '../../styles/scaling';
 import {
@@ -46,7 +50,7 @@ import {
   FONT_SIZE_30,
 } from '../../styles/typography';
 import {isEmpty} from '../../utils/Utills';
-//import entries from './entries';
+import entries from './entries';
 import styles from './styles';
 
 class AgentDashboard extends Component {
@@ -93,49 +97,204 @@ async componentDidMount() {
   await this.GetLoginData();
 }
 
-  getCreatedService = () => {
-  const url = apiConstant.SEARCH_TICKETS;
+componentWillUnmount() {
+  BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+}
+
+_handleBackButtonClick = () => {
+ 
+  this.props.navigation.goBack(null);
+    return true;
+}
+
+resetStack = () => {
+  const navigateAction = NavigationActions.navigate({
+    routeName: "AuthLogin",
+    key: null,
+    index: 0,
+    action: NavigationActions.navigate({ routeName: "AuthLogin" }),
+  });
+  this.props.navigation.dispatch(navigateAction);
+};
+
+logout = () => {
+
+  this.setState({ showLogoutPopUp: true });
+};
+onCancelClick = () => {
+  this.setState({
+    showLogoutPopUp: false,
+    showImagePopUp: false,
+    showRemovePhotoPopUp: false,
+  });
+};
+
+confirmLogoutClick = async () => {
+  await clearStore("user");
+  await this.setState({ showLogoutPopUp: false });
+  await this.toggleOpen();
+  this.props.navigation.navigate('AuthLogin');
+ // await this.resetStack();
+};
+
+
+toggleOpen = () => {
+  this.setState({open: !this.state.open});
+};
+
+drawerContent = () => {
+  return (
+    
+    <TouchableOpacity onPress={this.toggleOpen} style={styles.animatedBox}>
+    <View
+         style={{
+           width: '100%',
+         height: scaleHeight * 114,
+         marginTop: scaleHeight * 22,
+         //marginBottom: scaleHeight * 22,
+         alignItems: 'center',
+         justifyContent: 'center',
+        //   marginTop: 20,
+           flexDirection: 'row',
+           borderRadius: scaleHeight * 25,
+         }}>
+           <Image
+           style={{ height: scaleHeight * 100,
+             width: scaleHeight * 100,
+            // marginLeft:20,
+            justifyContent:'center',
+           alignItems:'center'
+         }}
+             source={LOGO}
+             resizeMode={'contain'}
+           />
+       </View>
+       <TouchableOpacity onPress={() => this.editprofile()}>
+
+       <View style={{ marginTop: 20 }}>
+               <View
+                 style={{
+                   flexDirection: "row",
+                   alignItems: "center",
+                  // marginTop: 20,
+                   paddingBottom: 12,
+                   //borderBottomWidth: 1,
+                 //  borderColor: GRAY_DARK,
+                 }}
+               > 
+                 <Text
+                   style={{
+                     marginLeft: 10,
+                     fontSize: Typography.FONT_SIZE_18,
+                     color: this.props.theme.BACKGROUND_COLOR,
+                   }}
+                 >
+                   Edit Profile
+                 </Text>
+
+                 <Image
+                   style={{
+                     height: scaleHeight * 16,
+                     width: scaleWidth * 16,
+                     marginLeft: scaleWidth * 30,
+                     tintColor: this.props.theme.BUTTON_TEXT_COLOR,
+                   }}
+                   source={PENCIL}
+                 />
+
+               </View>
+             
+           </View>
+           </TouchableOpacity>
+
+           <View style={{width:'100%',
+         height: scaleHeight * 1,
+         backgroundColor: this.props.theme.WHITE
+         }}>
+
+           </View>
+
+           <TouchableOpacity onPress={() => this.logout()}>
+
+        <View style={{ marginTop: 10 }}>
+               <View
+                 style={{
+                   flexDirection: "row",
+                   paddingBottom: 12,
+                   //borderBottomWidth: 1,
+                 //  borderColor: GRAY_DARK,
+                 }}
+               >
+                 <Text
+                   style={{
+                     marginLeft: 10,
+                     fontSize: Typography.FONT_SIZE_18,
+                     color: this.props.theme.BACKGROUND_COLOR,
+                   }}
+                 >
+                   Logout
+                 </Text>
+
+                 <Image
+                   style={{
+                     height: scaleHeight * 18,
+                     width: scaleWidth * 18,
+                      marginLeft: scaleWidth * 60,
+                     tintColor: this.props.theme.BUTTON_TEXT_COLOR,
+                   }}
+                   source={LOGOUT}
+                 />
+
+               </View>
+           </View>
+           </TouchableOpacity>
+           <View style={{width:'100%',
+         height: scaleHeight * 1,
+         backgroundColor: this.props.theme.WHITE
+         }}>
+
+           </View>
+ </TouchableOpacity>
+);
+};
+
+  getCreatedService = async () => {
+    await this.setState({loading: true});
+  const url = apiConstant.GET_ALL_USERS;
 
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + this.state.Token,
   };
 
-  const requestBody = {
-    UserID: this.state.UserID,
-      TicketNumber: this.state.TicketNumber,
-      TicketStatusID: this.state.TicketStatusID,
-      FromDate: this.state.FromDate,
-      ToDate: this.state.ToDate,
-  }
+  console.log('urll of get all users ==> ' + JSON.stringify(url));
+  console.log('headers get all users==> ' + JSON.stringify(headers));
 
-  console.log('url ==> ' + JSON.stringify(url));
-  console.log('headers ==> ' + JSON.stringify(headers));
-
-  isNetAvailable().then((success) => {
+  isNetAvailable().then(success => {
     if (success) {
-      fetchServerDataPost(url,requestBody ,headers)
-        .then(async (response) => {
+      fetchServerDataGet(url, headers)
+        .then(async response => {
           let data = await response.json();
-          console.log('data service create => ', JSON.stringify(data));
+          console.log('data get all users==> ' + JSON.stringify(data));
           if (data.status === 200) {
-            this.setState({loading: false});
-            this.setState({created_service: data.data});
+            await this.setState({loading: false});
+            await this.setState({get_users: data.data});
+            //await this.props.navigation.navigate('DoctorProfile');
           } else {
-            this.setState({loading: false});
+            await this.setState({loading: false});
             this.props.showAlert(
               true,
               Globals.ErrorKey.ERROR,
-              data.message,
+              data.status_msg,
             );
-          } 
+          }
         })
-        .catch((error) => {
+        .catch(error => {
           this.setState({loading: false});
           this.props.showAlert(
             true,
             Globals.ErrorKey.ERROR,
-            Globals._KEYS._SOMETHING_WENT_WRONG,
+            'Something Went Wrong',
           );
         });
     } else {
@@ -143,20 +302,25 @@ async componentDidMount() {
       this.props.showAlert(
         true,
         Globals.ErrorKey.NETWORK_ERROR,
-        Globals._KEYS._PLEASE_CHECK_NETWORK_CONNECTION,
+        'Please check network connection.',
       );
     }
   });
 };
 
   onClickItem = (item) => {
-    this.props.navigation.navigate('DetailScreen',{detail: item});
+    //this.props.navigation.navigate('DetailScreen',{detail: item});
+  };
+
+  onTechnician = (item) => {
+    this.props.navigation.navigate('AgentTechincianScreen',{technician : item});
   };
 
   renderItem = ({item}) => {
     return (
-      <HomeList
+      <AgentList
         onItemPress={() => this.onClickItem(item)}
+        onTechnicianPress={() => this.onTechnician(item)}
         viewWidth={scaleWidth * 330}
         viewHeight={scaleHeight * 120}
         item={item}
@@ -204,6 +368,8 @@ async componentDidMount() {
     }
   };
 
+  
+
   render() {
     //console.log('name', this.props.navigation.getParam('name'));
     const {created_service} = this.state;
@@ -213,7 +379,7 @@ async componentDidMount() {
     return (
       <CustomBGParent
         backGroundColor={'white'}
-        // loading={this.state.loading}
+         loading={this.state.loading}
         topPadding={false}>
         <View>
           <View
@@ -221,56 +387,39 @@ async componentDidMount() {
               width: '100%',
               flexDirection: 'row',
               alignItems: 'center',
-              marginVertical: scaleHeight * 25,
+             // marginVertical: scaleHeight * 40,
             }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: 30,
-                height: scaleHeight * 25,
-                justifyContent:
-                  Platform.OS === 'android' ? 'flex-end' : 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: Typography.FONT_SIZE_16,
-                  color: this.props.theme.PRIMARY_TEXT_COLOR,
-                  fontWeight: 'bold',
-                }}>
-                Your request
-              </Text>
+          <View
+              style={{flex: 1, justifyContent: 'flex-start'}}>
+              <MenuDrawer
+                open={this.state.open}
+                drawerContent={this.drawerContent()}
+                drawerPercentage={50}
+                animationTime={250}
+                overlay={true}
+                opacity={0.4}
+                >
+                <TouchableOpacity onPress={this.toggleOpen}>
+                  <Image
+                    resizeMode={'contain'}
+                    style={{
+                      marginTop: scaleHeight * 5,
+                      marginStart:10,
+                      width: scaleWidth * 40,
+                      height: scaleHeight * 40,
+                      tintColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
+                    }}
+                    source={MENU}
+                  />
+                </TouchableOpacity>
+              </MenuDrawer>
             </View>
-            <View
-              style={{
-                height: scaleHeight * 25,
-                position: 'absolute',
-                right: scaleWidth * 20,
-                alignItems: 'center',
-                justifyContent:
-                  Platform.OS === 'android' ? 'flex-end' : 'center',
-              }}>
-              <CustomButton
-                buttonStyle={[
-                  styles.buttonsShadow,
-                  {backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR},
-                ]}
-                onPress={() => this.createService()}
-                textStyle={{
-                  fontSize: FONT_SIZE_16,
-                  color: this.props.theme.BUTTON_TEXT_COLOR,
-                }}
-                buttonText={'Create Request'}
-                cornerRadius={20}
-                buttonHeight={SCALE_25}
-                buttonWidth={scaleSize(130)}
-              />
-            </View>
-          </View>
+
+   </View>
           <View
             style={{
-              marginHorizontal: SCALE_15,
-              marginBottom: scaleHeight * 50,
+              marginVertical: scaleHeight * 50,
+              marginHorizontal: scaleHeight * 10,
             }}>
             <FlatList
               data={created_service}
@@ -287,6 +436,14 @@ async componentDidMount() {
               showsVerticalScrollIndicator={false}
             />
           </View>
+          <ConfirmationPopUp
+          isModelVisible={this.state.showLogoutPopUp}
+          positiveButtonText={Globals.YES}
+          negativeButtonText={Globals.NO}
+          onPositivePress={() => this.confirmLogoutClick()}
+          onNegativePress={() => this.onCancelClick()}
+          alertMessage={Globals.LOGOUT_MESSAGE}
+        />
         </View>
       </CustomBGParent>
     );
