@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
   animatedBox: {
     flex: 1,
-    backgroundColor: "#38C8EC",
+    backgroundColor: "#1DA0EA",
     padding: 10
   }, 
   cardShadow: {

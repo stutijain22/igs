@@ -55,7 +55,7 @@ class AgentList extends Component {
                     color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                     fontWeight: 'normal',
                   }}>
-                  {isEmpty(false, this.props.item.TicketNumber)}
+                  {isEmpty(false, this.props.item.Email)}
                 </Text>
 
                 <View
@@ -72,16 +72,16 @@ class AgentList extends Component {
                       paddingHorizontal: scaleHeight * 10,
                       fontSize: Typography.FONT_SIZE_16,
                       color:
-                        this.props.item.status === 'Close'
+                        this.props.item.StatusID === 'Close'
                           ? this.props.theme.GREEN
                           : this.props.item.status === 'Accept'
                           ? this.props.theme.BUTTON_BACKGROUND_COLOR
                           : this.props.theme.RED,
                       fontWeight: 'bold',
                     }}>
-                    {this.props.item.status === 'Close'
+                    {this.props.item.StatusID === 'Close'
                       ? 'CLOSE'
-                      : this.props.item.status === 'Accept'
+                      : this.props.item.StatusID === 'Accept'
                       ? 'ACCEPT'
                       : 'PENDING'}
                   </Text>
@@ -102,7 +102,7 @@ class AgentList extends Component {
                       color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                       fontWeight: 'bold',
                     }}>
-                    {isEmpty(false, this.props.item.ProblemName)}
+                    {isEmpty(false, this.props.item.FirstName + ' ' + this.props.item.LastName ) }
                   </Text>
                 </View>
 
@@ -114,8 +114,21 @@ class AgentList extends Component {
                     color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                     fontWeight: 'normal',
                   }}>
-                  {isEmpty(false, this.props.item.Description)}
+                  {isEmpty(false, this.props.item.DateOfBirth)}
                 </Text>
+
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    textAlign: 'left',
+                    fontSize: Typography.FONT_SIZE_16,
+                    color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
+                    fontWeight: 'normal',
+                  }}>
+                  {isEmpty(false, this.props.item.PhoneNo)}
+                </Text>
+
+
               </View>
               <View
                 style={{

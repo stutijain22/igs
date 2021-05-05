@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Keyboard,
   Platform,
+  Text,
+  TextInput,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
@@ -36,6 +37,7 @@ import {connect} from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
 import {bindActionCreators} from 'redux';
 import {showAlert} from '../../redux/action';
+import {SPLASH_ICON} from '../../images';
 
 var radio_props = [
   {label: Globals.HOME, value: 0},
@@ -98,7 +100,7 @@ class Login extends Component {
     });
   };
 
- /* _onFocus = () => {
+  /* _onFocus = () => {
     const {navigation} = this.props;
     const userType = navigation.getParam('userType');
     if (userType === Globals.CUSTOMER) {
@@ -165,6 +167,16 @@ class Login extends Component {
             {backgroundColor: this.props.theme.BACKGROUND_COLOR},
           ]}
           keyboardShouldPersistTaps="handled">
+             <Image
+            style={{
+              width: '70%',
+              height: scaleHeight * 50,
+              marginTop: scaleHeight * 50,
+              marginStart: scaleWidth * 60,
+            }}
+            source={SPLASH_ICON}
+            resizeMode={'cover'}
+          />
           <View style={styles.textViewHeader}>
             <CustomTextView
               textStyle={{
@@ -187,8 +199,8 @@ class Login extends Component {
               labelStyle={{marginRight: 10}}
               formHorizontal={true}
               animation={true}
-              buttonSize={15}
-              buttonOuterSize={25}
+              buttonSize={10}
+              buttonOuterSize={20}
               // labelHorizontal={false}
               onPress={value => {
                 this.setState({value: value});
@@ -200,66 +212,95 @@ class Login extends Component {
             <CustomBGCard
               topMargin={scaleHeight * 15}
               cornerRadius={scaleWidth * 15}
-            //  bgColor={this.props.theme.CARD_BACKGROUND_COLOR}
-              >
+              //  bgColor={this.props.theme.CARD_BACKGROUND_COLOR}
+            >
               <View style={styles.inputViewCards}>
-                {this.state.value == 0 && (
+              {this.state.value == 0 && (
+                <View>
+              <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                  Agent Id
+                </Text>
+
+                <View
+                   style = {styles.input}
+                   >
                   <TextInput
-                    keyboardType="default"
-                    returnKeyType={'next'}
-                    label="Agent id"
-                    autoFocus={true}
-                    value={this.state.agent_id}
-                    mode="outlined"
-                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
-                    onChangeText={text => this.setState({agent_id: text})}
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Agent Id"
+                    autoCapitalize="none"
+                    keyboardType='numeric'
+                    onChangeText={(text) => this.setState({agent_id: text})}
                   />
+                </View>
+                </View>
                 )}
 
-                <TextInput
-                 // onFocus={this.onFocusChange}
-                  keyboardType="default"
-                  returnKeyType="next"
-                  value={this.state.name}
-                  label="Name"
-                  // autoFocus
-                  mode="outlined"
-                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
+                <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                Name
+                </Text>
+
+                <View
+                   style = {styles.input}
+                   >
+
+                  <TextInput
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Name"
+                    autoCapitalize="none"
                   onChangeText={text => this.setState({name: text})}
-                />
+                  />
+                
+                </View>
 
-                <TextInput
-                 // onFocus={this.onFocusChange}
-                  keyboardType="default"
-                  returnKeyType="next"
-                  value={this.state.dob}
-                  label="Date Of Birth"
-                  mode="outlined"
-                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
-                  onChangeText={text => this.setState({dob: text})}
-                />
+                <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                Date Of Birth
+                </Text>
 
-                <TextInput
-                 // onFocus={this.onFocusChange}
+                <View
+                   style = {styles.input}
+                   >
+                  <TextInput
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Date Of Birth"
+                    autoCapitalize="none"
+                    onChangeText={text => this.setState({dob: text})}
+                  />
+                </View>
+
+                <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                Phone Number
+                </Text>
+
+                <View
+                   style = {styles.input}
+                   >
+                  <TextInput
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Phone Number"
+                    autoCapitalize="none"
                   keyboardType={'numeric'}
-                  label="Phone Number"
-                  value={this.state.phone_number}
-                  returnKeyType="next"
-                  mode="outlined"
-                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
                   onChangeText={text => this.setState({phone_number: text})}
-                />
+                  />
+                </View>
 
-                <TextInput
-                 // onFocus={this.onFocusChange}
+                <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                Email(optional)
+                </Text>
+
+                <View
+                   style = {styles.input}
+                   >
+                  <TextInput
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Email(optional)"
+                    autoCapitalize="none"
                   keyboardType={'numeric'}
-                  label="Email(optional)"
-                  value={this.state.email}
-                  returnKeyType="done"
-                  mode="outlined"
-                  theme={{ colors: { primary:this.props.theme.BUTTON_BACKGROUND_COLOR ,underlineColor:'transparent',}}}
                   onChangeText={text => this.setState({email: text})}
-                />
+                  />
+                </View>
+
+              </View>
+              <View>
               </View>
             </CustomBGCard>
           </View>

@@ -294,7 +294,7 @@ class DetailScreen extends Component {
                     noOfLines={1}
                     //fontPaddingVertical={5}
                     fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    value={detail.requestId}
+                    value={detail.TicketNumber}
                     fontSize={FONT_SIZE_16}
                   />
                 </View>
@@ -312,13 +312,13 @@ class DetailScreen extends Component {
                       color: this.props.theme.PRIMARY_TEXT_COLOR,
                       fontWeight: 'bold',
                     }}>
-                    Title :
+                    Problem Name :
                   </Text>
                   <CustomTextView
                     noOfLines={1}
                     //fontPaddingVertical={5}
                     fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    value={detail.title}
+                    value={detail.ProblemName}
                     fontSize={FONT_SIZE_16}
                   />
                 </View>
@@ -336,13 +336,13 @@ class DetailScreen extends Component {
                       color: this.props.theme.PRIMARY_TEXT_COLOR,
                       fontWeight: 'bold',
                     }}>
-                    Time :
+                    Customer :
                   </Text>
                   <CustomTextView
                     noOfLines={1}
                     //fontPaddingVertical={5}
                     fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    value={detail.time}
+                    value={detail.Customer}
                     fontSize={FONT_SIZE_16}
                   />
                 </View>
@@ -366,7 +366,7 @@ class DetailScreen extends Component {
                     noOfLines={1}
                     //fontPaddingVertical={5}
                     fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    value={detail.status}
+                    value={detail.StatusName}
                     fontSize={FONT_SIZE_16}
                   />
                 </View>
@@ -383,7 +383,7 @@ class DetailScreen extends Component {
                       color: this.props.theme.PRIMARY_TEXT_COLOR,
                       fontWeight: 'bold',
                     }}>
-                    Discription :
+                    Description :
                   </Text>
                   <CustomTextView
                   //textStyle={{paddingHorizontal: scaleWidth * 10}}
@@ -391,7 +391,7 @@ class DetailScreen extends Component {
                     width= "100%"
                     paddingHorizontal={scaleWidth * 10}
                     fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    value={detail.discription}
+                    value={detail.Description}
                     fontSize={FONT_SIZE_16}
                   />
                 </View>

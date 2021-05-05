@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Keyboard,
   Platform,
+  TextInput,
+  Text,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
 import CustomBGParent from '../../components/CustomBGParent';
 import CustomTextView from '../../components/CustomTextView';
 import {GRAY_DARK, TEXT_COLOR} from '../../styles/colors';
@@ -40,6 +41,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showAlert} from '../../redux/action';
 import {storeJSONData, getJSONData} from '../../utils/AsyncStorage';
+import {LOGO, SPLASH_ICON} from '../../images';
 
 var radio_props = [
   {label: Globals.HOME, value: 0},
@@ -61,8 +63,8 @@ class Login extends Component {
       isBarberSelected: false,
       isShowPassword: false,
       isEmail: false,
-   //   phone_number: '9988776656',
-      password: 'test123',
+      //   phone_number: '9988776656',
+      password: 'support123',
       agent_id: '',
       fcmToken: '',
       signInButtonText: Globals.CUSTOMER_SIGN_IN,
@@ -116,12 +118,12 @@ class Login extends Component {
     console.log('value', value);
     console.log('usertype', userType);
 
-    if (value == null || isEmpty(true,userType) ) {
+    if (value == null || isEmpty(true, userType)) {
       console.log('sssssssssssssssss00');
       navigation.navigate('AuthLogin');
     } else {
       if (value.UserTypeID == 1) {
-        console.log('usertype1',value.UserTypeID);
+        console.log('usertype1', value.UserTypeID);
         this.props.navigation.navigate('HomeNavigation');
       } else if (value.UserTypeID == 2) {
         console.log('usertype2', value.UserTypeID);
@@ -151,7 +153,7 @@ class Login extends Component {
     await this.setState({loading: true});
     const url = apiConstant.AUTHENTICATE;
 
-    console.log('phoneeeeeeeee',JSON.stringify(this.state.phone_number));
+    console.log('phoneeeeeeeee', JSON.stringify(this.state.phone_number));
     const requestBody = {
       Phone: this.state.phone_number,
       Password: this.state.password,
@@ -221,6 +223,10 @@ class Login extends Component {
     // this.VerifyNumber();
   };
 
+  handleEmail = text => {
+    this.setState({phone_number: text});
+  };
+
   render() {
     return (
       <CustomBGParent
@@ -233,6 +239,16 @@ class Login extends Component {
             {backgroundColor: this.props.theme.BACKGROUND_COLOR},
           ]}
           keyboardShouldPersistTaps="handled">
+          <Image
+            style={{
+              width: '70%',
+              height: scaleHeight * 50,
+              marginTop: scaleHeight * 50,
+              marginStart: scaleWidth * 60,
+            }}
+            source={SPLASH_ICON}
+            resizeMode={'cover'}
+          />
           <View style={styles.textViewHeader}>
             <CustomTextView
               textStyle={{
@@ -255,8 +271,8 @@ class Login extends Component {
               labelStyle={{marginRight: 10}}
               formHorizontal={true}
               animation={true}
-              buttonSize={12}
-              buttonOuterSize={22}
+              buttonSize={10}
+              buttonOuterSize={20}
               // labelHorizontal={false}
               onPress={value => {
                 this.setState({value: value});
@@ -266,25 +282,29 @@ class Login extends Component {
 
           <View style={[styles.cardShadow, styles.margins]}>
             <CustomBGCard topMargin={scaleHeight * 20} cornerRadius={10}>
-              <View
-                style={{
-                  marginBottom: scaleHeight * 60,
-                  marginTop: scaleHeight * 20,
-                  marginHorizontal: scaleHeight * 20,
-                }}>
-                <TextInput
-                  label="Enter Your Phone Number"
-                  keyboardType={'phone-pad'}
-                  value={this.state.phone_number}
-                  mode="outlined"
-                  theme={{
-                    colors: {
-                      primary: this.props.theme.BUTTON_BACKGROUND_COLOR,
-                      underlineColor: 'transparent',
-                    },
-                  }}
-                  onChangeText={text => this.setState({phone_number: text})}
-                />
+              <View style={{marginHorizontal: scaleHeight * 10}}>
+                <Text style={{color: this.props.theme.BUTTON_BACKGROUND_COLOR}}>
+                  Phone Number
+                </Text>
+
+                <View
+                  style={{
+                    marginVertical: scaleHeight * 10,
+                    height: scaleHeight * 50,
+                    borderColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
+                    borderWidth: 1,
+                  }}>
+                  <TextInput
+                    // style = {styles.input}
+                    //   underlineColorAndroid = "transparent"
+                    placeholder="Phone Number"
+                    keyboardType={'number-pad'}
+                    //   placeholderTextColor = { this.props.theme.BUTTON_BACKGROUND_COLOR}
+                    autoCapitalize="none"
+                    onChangeText={this.handleEmail}
+                    value={this.state.phone_number}
+                  />
+                </View>
               </View>
             </CustomBGCard>
           </View>

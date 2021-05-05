@@ -50,9 +50,30 @@ import {
   FONT_SIZE_25,
   FONT_SIZE_30,
 } from '../../styles/typography';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Icon from 'react-native-vector-icons';
 import {isEmpty} from '../../utils/Utills';
 import entries from './entries';
 import styles from './styles';
+
+const List = [
+  {
+    label: 'USA',
+    value: 'usa',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
+    //hidden: true,
+  },
+  {
+    label: 'UK',
+    value: 'uk',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
+  },
+  {
+    label: 'France',
+    value: 'france',
+    //icon: () => <Icon name="flag" size={18} color="#900" />,
+  },
+]
 
 class Dashboard extends Component {
   constructor(props) {
@@ -75,6 +96,10 @@ class Dashboard extends Component {
       FromDate: null,
       ToDate: null,
       open: false,
+      searchText: '',
+      country:'uk',
+      dropDownOpen:'false'
+
       //image: apiConstant.NO_IMAGE_URL,
     };
 
@@ -92,7 +117,7 @@ class Dashboard extends Component {
     }*/
       await this.setState({
         Token: user_data.Token,
-        UserID: user_data.UserID
+        UserID: user_data.UserID,
         // name: user_data.name,
       });
     }
@@ -146,6 +171,10 @@ class Dashboard extends Component {
     await this.toggleOpen();
     this.props.navigation.navigate('AuthLogin');
     // await this.resetStack();
+  };
+
+  _onFocus = async () => {
+   await this.getCreatedService();
   };
 
   toggleOpen = () => {
@@ -269,7 +298,7 @@ class Dashboard extends Component {
       Authorization: 'Bearer ' + this.state.Token,
     };
 
-   // console.log('token', this.state.Token);
+    // console.log('token', this.state.Token);
     const requestBody = {
       UserID: this.state.UserID,
       TicketNumber: this.state.TicketNumber,
@@ -286,11 +315,7 @@ class Dashboard extends Component {
       if (success) {
         fetchServerDataPost(url, requestBody, headers)
           .then(async response => {
-            console.log(
-              'response service create => ',
-              JSON.stringify(response),
-            );
-
+            console.log('response',JSON.stringify(response))
             let data = await response.json();
             console.log('data service create => ', JSON.stringify(data));
             if (data.status === 200) {
@@ -349,6 +374,17 @@ class Dashboard extends Component {
     this.props.navigation.navigate('CreateService');
   };
 
+  searchFilterFunction = async text => {
+    if (text.toString().trim().length >= 3) {
+      this.setState({loading: false, searchText: text});
+   //   console.log('ddddddddddd', JSON.stringify(this.state.searchText));
+      await this.getCreatedService();
+      //  await this.sendBarberLocation();
+    } else {
+      this.setState({searchText: text});
+    }
+  };
+
   renderFooter = () => {
     try {
       if (this.state.refreshing) {
@@ -383,11 +419,15 @@ class Dashboard extends Component {
 
     return (
       <CustomBGParent loading={this.state.loading} topPadding={false}>
+        <NavigationEvents
+          onWillFocus={this._onFocus}
+          //onWillBlur={this._onBlurr}
+        />
         <View>
           <View
             style={{
               width: '100%',
-             // flex: 1,
+              // flex: 1,
               //  marginTop: scaleHeight * 15,
             }}>
             <View style={{flex: 1, justifyContent: 'flex-start'}}>
@@ -406,7 +446,7 @@ class Dashboard extends Component {
                       marginStart: 10,
                       width: scaleWidth * 40,
                       height: scaleHeight * 40,
-                      tintColor: theme.BACKGROUND_COLOR,
+                      tintColor: theme.BUTTON_BACKGROUND_COLOR,
                     }}
                     source={MENU}
                   />
@@ -420,11 +460,10 @@ class Dashboard extends Component {
                 // justifyContent: "space-between",
                 alignItems: 'center',
                 //  width: "100%",
-                marginStart: scaleWidth * 50,
-                marginEnd: scaleWidth * 10,
+                marginHorizontal: scaleWidth * 45,
                 marginVertical: scaleHeight * 5,
                 height: scaleHeight * 45,
-                backgroundColor: theme.BACKGROUND_COLOR,
+                backgroundColor: theme.BUTTON_BACKGROUND_COLOR,
                 borderRadius: scaleWidth * 25,
               }}>
               <Image
@@ -444,8 +483,8 @@ class Dashboard extends Component {
                   fontSize: scaleWidth * 12,
                   height: scaleHeight * 45,
                 }}
-                //  onChangeText={(text) => this.searchFilterFunction(text)}
-                //value={this.state.searchText}
+                onChangeText={text => this.searchFilterFunction(text)}
+                value={this.state.searchText}
                 placeholder={'Search here ...'}
               />
             </View>
@@ -455,37 +494,59 @@ class Dashboard extends Component {
                 //height: scaleHeight * 25,
                 top: 10,
                 position: 'absolute',
-                right: scaleWidth * 30,
+                right: scaleWidth * 10,
                 alignItems: 'center',
                 flex: 1,
               }}>
-                <TouchableOpacity 
-              onPress={() => this.createService()}>
-              
-              <Image
-                source={ADD}
-                style={{
-                  //  marginHorizontal: scaleWidth * 10,
-                  marginVertical: scaleWidth * 4,
-                  height: scaleHeight * 25,
-                  width: scaleWidth * 25,
-                  tintColor: theme.BUTTON_BACKGROUND_COLOR,
-                  alignItems: 'flex-end',
-                  justifyContent: 'flex-end',
-                }}
-                resizeMode={'contain'}
-              />
+              <TouchableOpacity onPress={() => this.createService()}>
+                <Image
+                  source={ADD}
+                  style={{
+                    //  marginHorizontal: scaleWidth * 10,
+                    marginVertical: scaleWidth * 4,
+                    height: scaleHeight * 25,
+                    width: scaleWidth * 25,
+                    tintColor: theme.BUTTON_BACKGROUND_COLOR,
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                  }}
+                  resizeMode={'contain'}
+                />
               </TouchableOpacity>
             </View>
           </View>
+
+<View style={{marginHorizontal: scaleWidth * 20}}>
+          <DropDownPicker
+            items={List}
+            //onPress={(open) => console.log('was the picker open?', open)}
+            open={this.state.dropDownOpen}
+            defaultValue={this.state.country}
+            containerStyle={{height: 40,
+            marginVertical: scaleHeight * 10
+            }}
+            style={{backgroundColor: theme.WHITE,
+            borderRadius: scaleHeight *10,
+          }}
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            dropDownStyle={{backgroundColor: theme.WHITE,
+          }}
+            onChangeItem={item =>
+              this.setState({
+                country: item.value,
+                dropDownOpen: true
+              })
+            }
+          />
+</View>
           <View
             style={{
-              height: '100%',
-             marginVertical: scaleHeight * 20,
+             // marginVertical: scaleHeiht * 10,
               marginHorizontal: SCALE_10,
-              backgroundColor: theme.BACKGROUND_COLOR,
               borderRadius: 10,
-              //   marginBottom: scaleHeight * 50,
+              marginBottom: scaleHeight *250
             }}>
             <FlatList
               data={created_service}

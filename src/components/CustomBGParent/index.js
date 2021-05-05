@@ -35,7 +35,7 @@ class CustomBGParent extends Component {
                         translucent backgroundColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
                         barStyle="light-content" />}
 
-                    <View style={[styles.content, { backgroundColor: this.props.theme.BUTTON_BACKGROUND_COLOR, paddingTop: this.props.topPadding ? STATUSBAR_HEIGHT : 0 }]}>
+                    <View style={[styles.content, { backgroundColor: this.props.theme.BACKGROUND_COLOR, paddingTop: this.props.topPadding ? STATUSBAR_HEIGHT : 0 }]}>
                         
                         {this.props.children}
                     </View>

@@ -15,6 +15,7 @@ import {BACK} from '../../images';
 import {scaleWidth, scaleHeight} from '../../styles/scaling';
 import CustomBGCard from '../../components/CustomBGCard';
 import {GRAY_LIGHT} from '../../styles/colors';
+import DropDownPicker from 'react-native-dropdown-picker';
 import CustomBGParent from '../../components/CustomBGParent';
 import {ScrollView} from 'react-native-gesture-handler';
 import {isNetAvailable} from '../../utils/NetAvailable';
@@ -38,45 +39,24 @@ import {showAlert} from '../../redux/action';
 import MultiSelect from '../../components/MultiSelectDropDown';
 import {getDate} from '../../utils/DateTimeUtills';
 
-/*const items = [
+const List = [
   {
-    id: '92iijs7yta',
-    name: 'Ondo',
+    label: 'USA',
+    value: 'usa',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
+    //hidden: true,
   },
   {
-    id: 'a0s0a8ssbsd',
-    name: 'Ogun',
+    label: 'UK',
+    value: 'uk',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
   },
   {
-    id: '16hbajsabsd',
-    name: 'Calabar',
+    label: 'France',
+    value: 'france',
+    //icon: () => <Icon name="flag" size={18} color="#900" />,
   },
-  {
-    id: 'nahs75a5sg',
-    name: 'Lagos',
-  },
-  {
-    id: '667atsas',
-    name: 'Maiduguri',
-  },
-  {
-    id: 'hsyasajs',
-    name: 'Anambra',
-  },
-  {
-    id: 'djsjudksjd',
-    name: 'Benue',
-  },
-  {
-    id: 'sdhyaysdj',
-    name: 'Kaduna',
-  },
-  {
-    id: 'suudydjsjd',
-    name: 'Abuja',
-  },
-];*/
-
+]
 class CreateService extends Component {
   constructor(props) {
     super(props);
@@ -91,7 +71,9 @@ class CreateService extends Component {
       CreatedByUserID: '1',
       AssignedToUserID: null,
       service_problem: [],
-      //selectedItems: [],
+      create_service: [],
+    //  country: 'uk',
+      selectedItems: 0,
     };
   }
 
@@ -103,7 +85,7 @@ class CreateService extends Component {
       }*/
       await this.setState({
         Token: user_data.Token,
-        UserID: user_data.UserID
+        UserID: user_data.UserID,
         // name: user_data.name,
       });
     }
@@ -123,6 +105,7 @@ class CreateService extends Component {
       Authorization: 'Bearer ' + this.state.Token,
     };
 
+
     console.log('url ==> ' + JSON.stringify(url));
     console.log('headers ==> ' + JSON.stringify(headers));
 
@@ -134,7 +117,16 @@ class CreateService extends Component {
             console.log('data problem => ', JSON.stringify(data));
             if (data.status === 200) {
               this.setState({loading: false});
-              this.setState({service_problem: data.data});
+              let problem = [];
+              data.data.forEach((elem) => {
+                problem.push({
+                  label: elem.ProblemName,
+                  value: elem.ServiceProblemID,
+                });
+              });
+              this.setState({service_problem: problem});
+
+
             } else {
               this.setState({loading: false});
               this.props.showAlert(
@@ -167,16 +159,16 @@ class CreateService extends Component {
     await this.setState({loading: true});
     const url = apiConstant.CREATE_SERVICE_TICKET;
     const headers = {
-       'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.state.Token,
     };
 
     const requestBody = {
       UserID: this.state.UserID,
       TicketNumber: this.state.TicketNumber,
-      ServiceProblemID: this.state.selectedItems[0],
+      ServiceProblemID: this.state.selectedItems,
       Description: this.state.feedbacktext,
-      CreatedByUserID: this.state.CreatedByUserID,
+      CreatedByUserID: this.state.UserID,
       AssignedToUserID: this.state.AssignedToUserID,
     };
 
@@ -188,14 +180,13 @@ class CreateService extends Component {
       if (success) {
         fetchServerDataPost(url, requestBody, headers)
           .then(async response => {
-            console.log('responsessssssssssssssss', response);
             let data = await response.json();
             console.log('data ==> ' + JSON.stringify(data));
             if (data.status === 200) {
               console.log('data ==> ' + JSON.stringify(data));
               await this.setState({loading: false});
-              await this.setState({service_problem: data.data});
-              this.props.navigation.navigate("Dashboard");
+              await this.setState({create_service: data.data});
+              this.props.navigation.navigate('Dashboard');
               //alert(data.message);
             }
           })
@@ -241,28 +232,7 @@ class CreateService extends Component {
   };
 
   service_create = async () => {
-    this.signUpCheckValidity();
-  };
-
-  checkPhone = phone => {
-    if (!isNaN(phone)) {
-      const reg = /^[0]?[789]\d{9}$/;
-      if (this.isPhoneValid(reg, phone)) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
-  isPhoneValid = (reg, phone) => {
-    if (reg.test(phone) === false) {
-      return false;
-    } else {
-      return true;
-    }
+   await this.signUpCheckValidity();
   };
 
   onSubmitClick = async () => {
@@ -274,75 +244,11 @@ class CreateService extends Component {
     if (this.state.feedbacktext.toString().trim().length == 0) {
       this.props.showAlert(true, Globals.ErrorKey.WARNING, 'Please enter text');
     } else {
-    //  alert('Progress Mode');
+      //  alert('Progress Mode');
       await this.createService();
       // this.feedback();
     }
   };
-
-  /*  feedback = async () => {
-    await this.setState({ loading: true });
-    const user = await getJSONData(Globals._KEYS.USER_DATA);
-    const userId = user.pk_user_id;
-    const url = apiConstant.INSERT_USER_FEEDBACK;
-
-    const requestBody = {
-      userid: userId,
-      rating: this.state.rating,
-      message: this.state.feedbacktext,
-    };
-
-    const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-
-    console.log("urll of feedback ==> " + JSON.stringify(url));
-    console.log("requestBody feedback==> " + JSON.stringify(requestBody));
-    console.log("headers feedback==> " + JSON.stringify(headers));
-
-    isNetAvailable().then((success) => {
-      if (success) {
-        fetchServerDataPost(url, requestBody, headers)
-          .then(async (response) => {
-            let data = await response.json();
-            console.log("data feedback==> " + JSON.stringify(data));
-            if (data.status_id === 200) {
-              this.props.showAlert(
-                true,
-                Globals.ErrorKey.SUCCESS,
-                "Thanks for your Feedback"
-              );
-              await this.setState({ loading: false });
-              await this.clearStore();
-              await this.props.navigation.navigate('DoctorProfile');
-            } else {
-              await this.setState({ loading: false });
-              this.props.showAlert(
-                true,
-                Globals.ErrorKey.ERROR,
-                data.status_msg
-              );
-            }
-          })
-          .catch((error) => {
-            this.setState({ loading: false });
-            this.props.showAlert(
-              true,
-              Globals.ErrorKey.ERROR,
-              "Something Went Wrong"
-            );
-          });
-      } else {
-        this.setState({ loading: false });
-        this.props.showAlert(
-          true,
-          Globals.ErrorKey.NETWORK_ERROR,
-          "Please check network connection."
-        );
-      }
-    });
-  };*/
 
   goBack = async () => {
     this.props.navigation.navigate('Dashboard');
@@ -356,10 +262,10 @@ class CreateService extends Component {
     }
   };
 
-  onSelectedItemsChange = async selectedItems => {
-    console.log('selectedItems' + JSON.stringify(selectedItems));
-    this.setState({selectedItems});
-    await this.getAllService();
+  onSelectedItemsChange = async (item) => {
+    console.log('selectedItems' + JSON.stringify(item));
+    this.setState({selectedItems:item.value});
+  //  await this.getAllService();
   };
 
   render() {
@@ -421,79 +327,51 @@ class CreateService extends Component {
           <View style={[styles.cardShadow, styles.margins]}>
             <CustomBGCard
               cornerRadius={10}
-              bgColor={this.props.theme.CARD_BACKGROUND_COLOR}> 
+              bgColor={this.props.theme.CARD_BACKGROUND_COLOR}>
               <View style={{padding: scaleWidth * 10}}>
                 <View
                   style={{
-                  //  flex: 1,
-                    paddingVertical: scaleWidth * 10,
-                    paddingHorizontal: scaleWidth * 10,
-                   // backgroundColor: this.props.theme.WHITE,
+                    //flex: 1,
+                   // paddingVertical: scaleWidth * 10,
+                   // paddingHorizontal: scaleWidth * 10,
+                    // backgroundColor: this.props.theme.WHITE,
                   }}>
-                  <MultiSelect
-                    hideTags
-                    items={service_problem}
-                    uniqueKey="ServiceProblemID"
-                    ref={(component) => {
-                      this.multiSelect = component;
+                  <DropDownPicker
+                     items={service_problem}
+                   // items={List}
+                    defaultValue={'Select Problem'}
+                    containerStyle={{
+                      height: 40,
+                      marginVertical: scaleHeight * 10,
                     }}
-                    onSubmitClick={() => this.onSubmitClick()}
-                    onSelectedItemsChange={this.onSelectedItemsChange}
-                    selectedItems={selectedItems}
-                    selectText="Pick Items"
-                    single={true}
-                    searchInputPlaceholderText="Search Problem..."
-                    onChangeInput={(text) => console.log(text)}
-                    //altFontFamily="ProximaNova-Light"
-                    tagRemoveIconColor={
-                      this.props.theme.BUTTON_BACKGROUND_COLOR
+                    // selectText="Pick Items"
+                    style={{
+                      backgroundColor: '#fafafa',
+                     // marginHorizontal: scaleWidth * 20,
+                      borderRadius: scaleHeight * 10,
+                    }}
+                    itemStyle={{
+                      justifyContent: 'flex-start',
+                    }}
+                    dropDownStyle={{
+                      backgroundColor: '#fafafa',
+                    //  marginHorizontal: scaleWidth * 20,
+                     // marginHorizontal: scaleWidth * 10,
+                     // marginEnd: scaleWidth * 50
+                    }}
+              //     onSelectedItemsChange={}
+                    onChangeItem={item =>
+                      this.onSelectedItemsChange(item)
                     }
-                    tagBorderColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                    tagTextColor="#CCC"
-                    selectedItemTextColor={
-                      this.props.theme.SECONDARY_TEXT_COLOR
-                    }
-                    selectedItemIconColor={
-                      this.props.theme.BUTTON_BACKGROUND_COLOR
-                    }
-                    itemTextColor={this.props.theme.PRIMARY_TEXT_COLOR}
-                    displayKey="ProblemName"
-                    searchInputStyle={{color: '#CCC'}}
-                    submitButtonColor={this.props.theme.BUTTON_BACKGROUND_COLOR}
-                    submitButtonText="Submit"
-                    styleItemsContainer={{
-                      maxHeight: scaleHeight * 170,
-                      zIndex: 5,
-                      backgroundColor: this.props.theme.BACKGROUND_COLOR,
-                    }}
-                    styleListContainer={{zIndex: 5}}
-                    styleSelectorContainer={{
-                      position: 'absolute',
-                      right: 0,
-                      left: 0,
-                      zIndex: 5,
-                    }}
-                    styleDropdownMenuSubsection={{
-                      height: scaleHeight * 45,
-                      backgroundColor: GRAY_LIGHT,
-                      borderRadius: scaleWidth * 25,
-                      paddingLeft: 15,
-                      paddingRight: 5,
-                    }}
-                    styleInputGroup={{
-                      height: scaleHeight * 45,
-                      backgroundColor: GRAY_LIGHT,
-                      borderRadius: scaleWidth * 25,
-                      paddingRight: 10,
-                    }}
                   />
                 </View>
 
                 <TextInput
                   style={{
+                    marginTop: 20,
                     borderColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
                     borderWidth: 1,
-                    zIndex:5 ,
+                    zIndex: 5,
                   }}
                   onChangeText={text => this.setState({feedbacktext: text})}
                   value={this.state.review}
@@ -521,7 +399,7 @@ class CreateService extends Component {
                     onPress={() => this.service_create()}
                     textStyle={{
                       fontSize: FONT_SIZE_16,
-                     // marginHorizontal:scaleWidth * 5,
+                      // marginHorizontal:scaleWidth * 5,
                       color: this.props.theme.BUTTON_TEXT_COLOR,
                     }}
                     buttonText={'Create Ticket'}

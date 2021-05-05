@@ -13,7 +13,7 @@ import {
 import {Typography} from '../../styles';
 import {BACK} from '../../images';
 import EmptyView from '../../components/EmptyView';
-import {MENU,LOGO,PENCIL,LOGOUT} from '../../images';
+import {MENU,LOGO,PENCIL,LOGOUT,SEARCH} from '../../images';
 import {scaleWidth, scaleHeight} from '../../styles/scaling';
 import CustomBGCard from '../../components/CustomBGCard';
 import {GRAY_LIGHT} from '../../styles/colors';
@@ -21,6 +21,7 @@ import CustomTextView from '../../components/CustomTextView';
 import CustomBGParent from '../../components/CustomBGParent';
 import {ScrollView} from 'react-native-gesture-handler';
 import {isNetAvailable} from '../../utils/NetAvailable';
+import DropDownPicker from 'react-native-dropdown-picker';
 import {getJSONData, storeJSONData, clearStore} from '../../utils/AsyncStorage';
 import {NavigationEvents,NavigationActions} from 'react-navigation';
 import ConfirmationPopUp from "../../components/ConfirmationPopUp";
@@ -50,6 +51,25 @@ import AgentTechnician from '../../components/AgentTechnician';
 import {getDate} from '../../utils/DateTimeUtills';
 import styles from './styles';
 
+const List = [
+  {
+    label: 'USA',
+    value: 'usa',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
+    //hidden: true,
+  },
+  {
+    label: 'UK',
+    value: 'uk',
+  //  icon: () => <Icon name="flag" size={18} color="#900" />,
+  },
+  {
+    label: 'France',
+    value: 'france',
+    //icon: () => <Icon name="flag" size={18} color="#900" />,
+  },
+]
+
 
 class AssignTechnician extends Component {
   constructor(props) {
@@ -59,6 +79,8 @@ class AssignTechnician extends Component {
       show: false,
       loading: false,
       technician: this.props.navigation.getParam('technician'),
+      searchText: '',
+      country:'uk',
       // userType: Globals.PATIENT,
       //selectedItems: [],
     };
@@ -72,6 +94,7 @@ class AssignTechnician extends Component {
       }*/
       await this.setState({
         Token: user_data.Token,
+        UserID: user_data.UserID,
         // name: user_data.name,
       });
     }
@@ -84,6 +107,13 @@ class AssignTechnician extends Component {
     await this.GetLoginData();
   }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
   clearStore = () => {
     this.setState({
       // rating: '',
@@ -91,12 +121,6 @@ class AssignTechnician extends Component {
     });
   };
 
-  _onBlurr = () => {
-    BackHandler.removeEventListener(
-      'hardwareBackPress',
-      this._handleBackButtonClick,
-    );
-  };
 
   resetStack = () => {
     const navigateAction = NavigationActions.navigate({
@@ -128,16 +152,9 @@ class AssignTechnician extends Component {
    // await this.resetStack();
   };
 
-
-  _onFocus = () => {
-    BackHandler.addEventListener(
-      'hardwareBackPress',
-      this._handleBackButtonClick,
-    );
-  };
-
   _handleBackButtonClick = () => {
-    this.goBack();
+    this.props.navigation.goBack(null);
+
     return true;
   };
 
@@ -406,10 +423,6 @@ class AssignTechnician extends Component {
     );
   };
 
-  goBack = async () => {
-    this.props.navigation.navigate('Dashboard');
-  };
-
   onAssign = async item => {
     await this.assignTechnician();
     this.props.navigation.navigate('AgentTechincianScreen');
@@ -429,8 +442,20 @@ class AssignTechnician extends Component {
     }
   };
 
+  searchFilterFunction = async text => {
+    if (text.toString().trim().length >= 3) {
+      this.setState({loading: false, searchText: text});
+      console.log('ddddddddddd', JSON.stringify(this.state.searchText));
+      await this.getCreatedService();
+      //  await this.sendBarberLocation();
+    } else {
+      this.setState({searchText: text});
+    }
+  };
+
   render() {
     const {technician_data} = this.state;
+    const {theme} = this.props;
 
     return (
       <CustomBGParent loading={this.state.loading} topPadding={false}>
@@ -439,42 +464,103 @@ class AssignTechnician extends Component {
           onWillBlur={this._onBlurr}
         />
         <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-           // marginVertical: scaleHeight * 25,
-          }}>
-         
-          <View style={{flex: 1, justifyContent: 'flex-start'}}>
-            <MenuDrawer
-              open={this.state.open}
-              drawerContent={this.drawerContent()}
-              drawerPercentage={50}
-              animationTime={250}
-              overlay={true}
-              opacity={0.4}>
-              <TouchableOpacity onPress={this.toggleOpen}>
-                <Image
-                  resizeMode={'contain'}
-                  style={{
-                    marginTop: scaleHeight * 5,
-                    marginStart: 10,
-                    width: scaleWidth * 40,
-                    height: scaleHeight * 40,
-                    tintColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
-                  }}
-                  source={MENU}
-                />
-              </TouchableOpacity>
-            </MenuDrawer>
-          </View>
-        </View>
+            style={{
+             width: '100%',
+            //  flexDirection: 'row',
+              //alignItems: 'center',
+              // marginVertical: scaleHeight * 40,
+            }}>
+            <View style={{flex: 1, justifyContent: 'flex-start'}}>
+              <MenuDrawer
+                open={this.state.open}
+                drawerContent={this.drawerContent()}
+                drawerPercentage={50}
+                animationTime={250}
+                overlay={true}
+                opacity={0.4}>
+                <TouchableOpacity onPress={this.toggleOpen}>
+                  <Image
+                    resizeMode={'contain'}
+                    style={{
+                      marginTop: scaleHeight * 15,
+                      marginStart: 10,
+                      width: scaleWidth * 40,
+                      height: scaleHeight * 40,
+                      tintColor: this.props.theme.BUTTON_BACKGROUND_COLOR,
+                    }}
+                    source={MENU}
+                  />
+                </TouchableOpacity>
+              </MenuDrawer>
+            </View>
 
-        <View
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+               marginEnd: scaleWidth * 10,
+               marginStart: scaleWidth * 45,
+                marginVertical: scaleHeight * 10,
+                height: scaleHeight * 45,
+                backgroundColor: theme.BUTTON_BACKGROUND_COLOR,
+                borderRadius: scaleWidth * 25,
+              }}>
+              <Image
+                source={SEARCH}
+                style={{
+                  marginHorizontal: scaleWidth * 10,
+                  height: scaleHeight * 16,
+                  width: scaleWidth * 16,
+                }}
+                resizeMode={'contain'}
+              />
+
+              <TextInput
+                style={{
+                  paddingLeft: scaleWidth * 10,
+                  fontSize: scaleWidth * 12,
+                  height: scaleHeight * 45,
+                }}
+                onChangeText={text => this.searchFilterFunction(text)}
+                value={this.state.searchText}
+                placeholder={'Search here ...'}
+              />
+
+            </View>
+
+            <View style={{marginHorizontal: scaleWidth * 20}}>
+          <DropDownPicker
+            items={List}
+            //onPress={(open) => console.log('was the picker open?', open)}
+            open={this.state.dropDownOpen}
+            defaultValue={this.state.country}
+            containerStyle={{height: 40,
+            marginVertical: scaleHeight * 10
+            }}
+            style={{backgroundColor: theme.WHITE,
+            borderRadius: scaleHeight *10,
+          }}
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            dropDownStyle={{backgroundColor: theme.WHITE,
+          }}
+            onChangeItem={item =>
+              this.setState({
+                country: item.value,
+                dropDownOpen: true
+              })
+            }
+          />
+</View>
+ 
+
+          </View>
+              <View
           style={{
-            marginVertical: scaleHeight * 50,
+            marginVertical: scaleHeight * 20,
               marginHorizontal: scaleHeight * 10,
+              marginBottom: scaleHeight *250
           }}>
           <FlatList
             data={technician_data}

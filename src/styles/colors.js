@@ -30,3 +30,4 @@ export const THEME_BUTTON_COLOR = "#535BFE";
 export const THEME_BUTTON_DISABLE = "#A6AAFD";
 export const TEXT_COLOR = "#4E565E";
 export const CARD_COLOR = "#E1E3E9";
+export const BUTTON_BACKGROUND_COLOR= '#1DA0EA';

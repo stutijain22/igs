@@ -34,8 +34,8 @@ export const ARROW_CONTINUE = require(imagePath + "arrow_continue.png");
 export const ARROW_NEXT = require(imagePath + "arrow_next.png");
 export const NO_IMAGE = require(imagePath + "image_not_available.jpg");
 export const HAIR_DRESSER = require(imagePath + "hairdresser.png");
-export const BOOKING_PACK_CIRCLE = require(imagePath +
-  "booking_pack_circle.png");
+export const SPLASH_ICON = require(imagePath +
+  "splash_icon1.png");
 export const CARD_FRONT_IMAGE = require(imagePath + "cardImageFront.png");
 export const LOGOUT = require(imagePath + "logout.png");
 export const PENCIL = require(imagePath + "pencil.png");
@@ -55,6 +55,7 @@ export default {
   EYE_OFF,
   PASSSET,
   LOGO,
+  SPLASH_ICON,
   ADD,
   GOOGLE,
   DOCUMENTS,
@@ -79,7 +80,6 @@ export default {
   ARROW_CONTINUE,
   ARROW_NEXT,
   NO_IMAGE,
-  BOOKING_PACK_CIRCLE,
   LOGOUT,
   PENCIL,
   OK,

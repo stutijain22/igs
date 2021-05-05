@@ -54,7 +54,7 @@ class AgentTechnician extends Component {
                     color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                     fontWeight: 'normal',
                   }}>
-                  {isEmpty(false, this.props.item.AgentUserID)}
+                  {isEmpty(false, this.props.item.Email)}
                 </Text>
 
                 <View
@@ -106,7 +106,7 @@ class AgentTechnician extends Component {
                       color: this.props.theme.SERVICE_ITEM_TEXT_COLOR,
                       fontWeight: 'normal',
                     }}>
-                    {isEmpty(false, this.props.item.FirstName) +
+                    {isEmpty(false, this.props.item.FirstName) + ' ' +
                       isEmpty(false, this.props.item.LastName)}
                   </Text>
                 </View>

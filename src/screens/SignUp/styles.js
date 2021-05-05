@@ -1,5 +1,5 @@
 import { Platform, StatusBar, StyleSheet } from 'react-native';
-import { GRAY_DARK, THEME_BUTTON_COLOR } from "../../styles/colors";
+import { GRAY_DARK, THEME_BUTTON_COLOR,BUTTON_BACKGROUND_COLOR } from "../../styles/colors";
 import { scaleHeight, scaleWidth } from "../../styles/scaling";
 import { FONT_SIZE_16, } from "../../styles/typography";
 
@@ -9,6 +9,12 @@ const styles = StyleSheet.create({
     },
     textViewHeader: {
         marginTop: scaleHeight * 5
+    },
+    input:{
+        marginVertical: scaleHeight * 10,
+        height: scaleHeight * 50,
+        borderColor: BUTTON_BACKGROUND_COLOR,
+        borderWidth: 1,
     },
     buttonsShadow: {
         shadowColor: "#000",
@@ -69,8 +75,8 @@ const styles = StyleSheet.create({
         borderColor: GRAY_DARK,
     },
     inputViewCards: {
-        marginHorizontal: scaleWidth * 15,
-        marginBottom: scaleHeight * 60,
+        marginHorizontal: scaleWidth * 10,
+      //  marginBottom: scaleHeight * 60,
         marginTop: scaleHeight * 20
     }
 });

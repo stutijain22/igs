@@ -52,7 +52,6 @@ import {
   FONT_SIZE_30,
 } from '../../styles/typography';
 import {isEmpty} from '../../utils/Utills';
-import entries from './entries';
 import styles from './styles';
 
 const List = [
@@ -74,14 +73,14 @@ const List = [
   },
 ]
 
-class AgentDashboard extends Component {
+class AdminDashboard extends Component {
   constructor(props) {
     const {navigation} = props;
     super(props);
     this.state = {
       loading: false,
       is_doctor: false,
-      category: entries.ENTRIES,
+      category: {},
       swipeRefreshing: false,
       pageCount: 1,
       totalPageCount: 0,
@@ -94,7 +93,6 @@ class AgentDashboard extends Component {
       ToDate: null,
       searchText: '',
       country:'uk',
-      dropDownOpen:'false'
       //image: apiConstant.NO_IMAGE_URL,
     };
 
@@ -105,7 +103,6 @@ class AgentDashboard extends Component {
   GetLoginData = async () => {
     const user_data = await getJSONData('user');
     if (user_data != null) {
-      console.log('datqqqqqqqqqqqqqqqqqqq',user_data);
       /* if (user_data.type == 'Agent') {
       await this.setState({is_flag: true});
     }*/
@@ -259,10 +256,7 @@ class AgentDashboard extends Component {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                // marginTop: 20,
                 paddingBottom: 12,
-                //borderBottomWidth: 1,
-                //  borderColor: GRAY_DARK,
               }}>
               <Text
                 style={{
@@ -564,7 +558,6 @@ class AgentDashboard extends Component {
               marginVertical: scaleHeight * 20,
               marginHorizontal: scaleHeight * 10,
               marginBottom: scaleHeight *250
-
             }}>
             <FlatList
               data={get_users}
@@ -602,4 +595,4 @@ const mapDispatchToProps = dispatch => ({
   showAlert: bindActionCreators(showAlert, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AgentDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);
