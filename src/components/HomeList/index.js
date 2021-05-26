@@ -24,7 +24,9 @@ class HomeList extends Component {
             height: this.props.viewHeight,
             marginHorizontal: scaleWidth * 10,
             marginBottom: scaleHeight * 18,
-          }}>
+          }}
+         // onPress={this.props.Drawer}
+          >
           <View
             style={{
               flexDirection: 'column',
@@ -154,6 +156,7 @@ HomeList.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   viewWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onItemPress: PropTypes.func,
+  Drawer: PropTypes.func,
   onEditPress: PropTypes.func,
   onReviewPress: PropTypes.func,
   viewHeight: PropTypes.number,

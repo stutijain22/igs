@@ -55,6 +55,7 @@ import Icon from 'react-native-vector-icons';
 import {isEmpty} from '../../utils/Utills';
 import entries from './entries';
 import styles from './styles';
+import {closeDrawer} from './../../navigations/NavigationService';
 
 const List = [
   {
@@ -353,6 +354,7 @@ class Dashboard extends Component {
     return (
       <HomeList
         onItemPress={() => this.onClickItem(item)}
+      //  drawerPress={() => this.closeDrawer()}
         viewWidth={scaleWidth * 330}
         viewHeight={scaleHeight * 120}
         item={item}
@@ -418,12 +420,13 @@ class Dashboard extends Component {
     // console.log('theme dashboard ', theme);
 
     return (
-      <CustomBGParent loading={this.state.loading} topPadding={false}>
+      <CustomBGParent loading={this.state.loading} topPadding={false}
+      onPress={() => this.closeDrawer()}>
         <NavigationEvents
           onWillFocus={this._onFocus}
           //onWillBlur={this._onBlurr}
         />
-        <View>
+        <View >
           <View
             style={{
               width: '100%',
@@ -543,7 +546,7 @@ class Dashboard extends Component {
 </View>
           <View
             style={{
-             // marginVertical: scaleHeiht * 10,
+             marginVertical: scaleHeight * 50,
               marginHorizontal: SCALE_10,
               borderRadius: 10,
               marginBottom: scaleHeight *250
