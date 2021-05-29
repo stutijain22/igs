@@ -55,7 +55,7 @@ class Login extends Component {
     super(props);
     this.state = {
       loading: false,
-      emailOrPhone: '',
+      emailOrPhone: '9413156425',
       location: '',
       method: 'login',
       isCustomerSelected: true,
@@ -63,8 +63,10 @@ class Login extends Component {
       isBarberSelected: false,
       isShowPassword: false,
       isEmail: false,
-      //   phone_number: '9988776656',
-      password: 'support123',
+      phone_number: '',
+      UserID: 3,
+      OTP: '817095',
+      IsGenerateToken: false,
       agent_id: '',
       fcmToken: '',
       signInButtonText: Globals.CUSTOMER_SIGN_IN,
@@ -149,49 +151,49 @@ class Login extends Component {
     await this.signUpCheckValidity();
   };
 
-  callLoginApi = async () => {
-    await this.setState({loading: true});
-    const url = apiConstant.AUTHENTICATE;
-
-    console.log('phoneeeeeeeee', JSON.stringify(this.state.phone_number));
-    const requestBody = {
-      Phone: this.state.phone_number,
-      Password: this.state.password,
-    };
-
+  Login = async () => {
+    this.setState({loading: true});
+    let url = apiConstant.SEND_OTP;
     const headers = {
       'Content-Type': 'application/json;charset=UTF-8',
     };
 
-    console.log('Login url==> ' + JSON.stringify(url));
-    console.log('Login requestBody ==> ' + JSON.stringify(requestBody));
-    console.log('Login headers ==> ' + JSON.stringify(headers));
+    let requestBody = {
+      //  type: this.state.requestBody.type,
+      phone_number: this.state.emailOrPhone,
+    };
+
+    console.log('url verify otp', JSON.stringify(url));
+    console.log('header verify otp', JSON.stringify(headers));
+    console.log('requestBody verify otp => ', JSON.stringify(requestBody));
 
     isNetAvailable().then(success => {
       if (success) {
         fetchServerDataPost(url, requestBody, headers)
           .then(async response => {
+            console.log('response => ', JSON.stringify(response));
+
             let data = await response.json();
-            console.log('data ==> ' + JSON.stringify(data));
+            console.log('data => ', JSON.stringify(data));
             if (data.status === 200) {
               await this.setState({loading: false});
 
-              //store data
-              await storeJSONData('user', data.data);
-              await storeJSONData('value', this.state.value);
-              const user_data = await getJSONData('user');
-              const userType = await getJSONData('value');
-              // console.log('userType', JSON.stringify(userType));
-
-              //navigate screen
               this.props.navigation.navigate('OtpVerification', {
                 phone_number: this.state.emailOrPhone,
               });
+            } else {
+              await this.setState({loading: false});
+              this.props.showAlert(
+                true,
+                Globals.ErrorKey.ERROR,
+                data.status.message,
+              );
             }
           })
           .catch(error => {
             this.setState({loading: false});
             console.log('Login error : ', error);
+            // this.props.appReload(true);
           });
       } else {
         this.setState({loading: false});
@@ -205,7 +207,7 @@ class Login extends Component {
   };
 
   signUpCheckValidity = async () => {
-    if (this.state.phone_number.toString().trim().length == 0) {
+    if (this.state.emailOrPhone.toString().trim().length == 0) {
       this.props.showAlert(
         true,
         Globals.ErrorKey.WARNING,
@@ -213,7 +215,7 @@ class Login extends Component {
       );
     } else {
       await this.setState({loading: true});
-      await this.callLoginApi();
+      await this.Login();
       //this.uploadDocuments();
     }
   };
@@ -302,7 +304,8 @@ class Login extends Component {
                     //   placeholderTextColor = { this.props.theme.BUTTON_BACKGROUND_COLOR}
                     autoCapitalize="none"
                     onChangeText={this.handleEmail}
-                    value={this.state.phone_number}
+                    value={this.state.emailOrPhone}
+                    onChangeText={text => this.setState({emailOrPhone: text})}
                   />
                 </View>
               </View>

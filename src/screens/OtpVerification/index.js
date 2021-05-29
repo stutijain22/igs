@@ -5,9 +5,9 @@ import CustomTextView from '../../components/CustomTextView';
 import styles from './styles';
 import CustomButton from '../../components/CustomButton';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {storeData, storeJSONData,getJSONData} from '../../utils/AsyncStorage';
+import {storeData, storeJSONData, getJSONData} from '../../utils/AsyncStorage';
 import Globals from '../../constants/Globals';
-import { showAlert } from '../../redux/action'
+import {showAlert} from '../../redux/action';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
@@ -45,7 +45,12 @@ class OtpVerification extends Component {
       otpSentButtonText: "Didn't receive otp?",
       code: '',
       timer: 30,
-    //  userType: this.props.navigation.getParam('userType')
+      emailOrPhone: '9413156425',
+      UserID: 3,
+      Phone: '9413156425',
+      OTP: '817095',
+      IsGenerateToken: false,
+      //  userType: this.props.navigation.getParam('userType')
       // fromScreen: navigation.getParam('from'),
       // requestBody: navigation.getParam('requestBody')
     };
@@ -54,12 +59,12 @@ class OtpVerification extends Component {
   GetLoginData = async () => {
     const user_data = await getJSONData('user');
     if (user_data != null) {
-     /* if (user_data.type == 'Agent') {
+      /* if (user_data.type == 'Agent') {
         await this.setState({is_flag: true});
       }*/
       await this.setState({
         Token: user_data.Token,
-       // name: user_data.name,
+        // name: user_data.name,
       });
     }
     //await this.getCreatedService();
@@ -68,8 +73,7 @@ class OtpVerification extends Component {
   async componentDidMount() {
     this.setState({
       headerText: 'Verify OTP',
-      subHeaderText:
-        "You'll shortly receive an OTP on phone number.",
+      subHeaderText: "You'll shortly receive an OTP on phone number.",
       buttonText: 'Verify',
     });
     this.interval = setInterval(
@@ -84,11 +88,11 @@ class OtpVerification extends Component {
       1000,
     );
 
-   // const user_data = await getJSONData('user');
-  //await this.Login(user_data);
+    // const user_data = await getJSONData('user');
+    //await this.Login(user_data);
   }
 
- /* Login = async (value) => {
+  /* Login = async (value) => {
     const { navigation } = this.props;
     const userType = await getJSONData('value');
     console.log('userTypeeeeeeeee',JSON.stringify(userType));
@@ -133,76 +137,59 @@ class OtpVerification extends Component {
   onClick = async () => {
     const user_data = await getJSONData('user');
 
-   if (user_data.UserType == "Home") {
+    if (user_data.UserType == 'Home') {
       this.props.navigation.navigate('HomeNavigation');
-    } 
-    else if(user_data.UserType == "Agent") {
+    } else if (user_data.UserType == 'Agent') {
       this.props.navigation.navigate('AgentNavigation');
-    }
-    else if(user_data.UserType == "Admin") {
+    } else if (user_data.UserType == 'Admin') {
       this.props.navigation.navigate('AdminNavigation');
-    }
-    else{
+    } else {
       this.props.navigation.navigate('TechnicianNavigation');
     }
-   // this.props.navigation.navigate('HomeNavigation');
+    // this.props.navigation.navigate('HomeNavigation');
   };
 
+  callLoginApi = async () => {
+    await this.setState({loading: true});
+    const url = apiConstant.AUTHENTICATE;
 
-  VerifyOtp = code => {
-    this.setState({loading: true});
-    let url = apiConstant.VERIFY_OTP;
-    let headers = {'Content-Type': 'application/json'};
-
-    let requestBody = {
-      type: this.state.requestBody.type,
-      otp: code,
-      email: this.state.requestBody.email,
-      phone_number: this.state.requestBody.phone_number
-        ? this.state.requestBody.phone_number
-        : '',
+    // console.log('phoneeeeeeeee', JSON.stringify(this.state.phone_number));
+    const requestBody = {
+      // Phone: this.props.navigation.getParam('phone_number'),
+      Phone: this.state.phone_number,
+      UserID: this.state.UserID,
+      OTP: this.state.OTP,
+      IsGenerateToken: this.state.IsGenerateToken,
     };
 
-    console.log('requestBody verify otp => ', JSON.stringify(requestBody));
+    const headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+    };
+
+    console.log('Login url==> ' + JSON.stringify(url));
+    console.log('Login requestBody ==> ' + JSON.stringify(requestBody));
+    console.log('Login headers ==> ' + JSON.stringify(headers));
 
     isNetAvailable().then(success => {
       if (success) {
         fetchServerDataPost(url, requestBody, headers)
           .then(async response => {
             let data = await response.json();
-            console.log('data => ', JSON.stringify(data));
-            this.clearState();
-            if (data.status.code === 200) {
-              if (this.state.fromScreen === 'ForgotPassword') {
-                this.props.navigation.navigate('ResetPassword', {
-                  requestBody: requestBody,
-                });
-              } else {
-                if (data.result.user.is_otp_verified) {
-                  if (data.result.tokenId && data.result.user) {
-                    await storeJSONData('user', data.result.user);
-                    await storeData('tokenId', data.result.tokenId);
-                  }
-                  if (data.result.user.role_id == Globals.BARBER_ROLE_ID) {
-                    this.props.navigation.navigate('Barber');
-                  } else {
-                    this.props.navigation.navigate('Customer');
-                  }
-                }
-              }
-            } else {
+            console.log('data ==> ' + JSON.stringify(data));
+            if (data.status === 200) {
               await this.setState({loading: false});
-              this.props.showAlert(
-                true,
-                Globals.ErrorKey.ERROR,
-                data.status.message,
-              );
+
+              //store data
+              await storeJSONData('user', data.data);
+              //  await storeJSONData('value', this.state.value);
+              const user_data = await getJSONData('user');
+              //const userType = await getJSONData('value');
+              await onClick();
             }
           })
           .catch(error => {
             this.setState({loading: false});
-            //console.log("Login error : ", error);
-            this.props.appReload(true);
+            console.log('Login error : ', error);
           });
       } else {
         this.setState({loading: false});
@@ -272,18 +259,18 @@ class OtpVerification extends Component {
       <CustomBGParent loading={this.state.loading}>
         <View style={styles.textViewHeader}>
           <TouchableOpacity onPress={() => this.onClick()}>
-          <CustomTextView
-            textStyle={{
-              marginTop: SCALE_50,
-              marginLeft: SCALE_40,
-              fontWeight: 'bold',
-            }}
-            fontTextAlign={'left'}
-            fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
-            fontSize={FONT_SIZE_25}
-            value={this.state.headerText}
-          />
-</TouchableOpacity>
+            <CustomTextView
+              textStyle={{
+                marginTop: SCALE_50,
+                marginLeft: SCALE_40,
+                fontWeight: 'bold',
+              }}
+              fontTextAlign={'left'}
+              fontColor={this.props.theme.PRIMARY_TEXT_COLOR}
+              fontSize={FONT_SIZE_25}
+              value={this.state.headerText}
+            />
+          </TouchableOpacity>
           <CustomTextView
             textStyle={{
               marginTop: SCALE_15,
@@ -313,7 +300,7 @@ class OtpVerification extends Component {
               },
             ]}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
-           // onCodeFilled={this.VerifyOtp}
+            // onCodeFilled={this.VerifyOtp}
             placeholderCharacter={'*'}
             placeholderTextColor={this.props.theme.BUTTON_TEXT_COLOR}
           />
@@ -321,8 +308,8 @@ class OtpVerification extends Component {
 
         <View style={{marginHorizontal: SCALE_40}}>
           <CustomButton
-          onPress={() => this.onClick()}
-          /*  onPress={() =>
+            onPress={() => this.onClick()}
+            /*  onPress={() =>
               `${this.state.code}`.length < 4
                 ? this.props.showAlert(
                     true,
@@ -380,7 +367,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-   showAlert: bindActionCreators(showAlert, dispatch),
+  showAlert: bindActionCreators(showAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtpVerification);
